@@ -378,10 +378,33 @@
   }
   isiFilterOptions();
 
+  // FIX: fetch() TIDAK menganggap status HTTP non-2xx (401/403/500, atau
+  // halaman redirect login Google saat deployment belum "Anyone") sebagai
+  // error — ia tetap "berhasil" tapi body-nya bukan JSON. res.json() lalu
+  // melempar SyntaxError yang sebelumnya hanya ditangkap sebagai pesan
+  // generik "Terjadi kesalahan jaringan. Coba lagi." tanpa info lebih jauh.
+  // _parseRespon membedakan itu dan tetap memberi pesan yang jelas ke user.
+  async function _parseRespon(res) {
+    let teks;
+    try {
+      teks = await res.text();
+    } catch (errBaca) {
+      throw new Error('Gagal membaca respons server.');
+    }
+    let data;
+    try {
+      data = JSON.parse(teks);
+    } catch (errParse) {
+      console.error('Respons server bukan JSON (cek APPS_SCRIPT_URL / status deployment Apps Script):', teks.slice(0, 300));
+      throw new Error('Server tidak memberi respons yang valid. Pastikan URL Apps Script & deployment sudah benar.');
+    }
+    return data;
+  }
+
   async function apiGet(aksi, params) {
     const qs = new URLSearchParams({ aksi, token: TOKEN, ...params }).toString();
     const res = await fetch(`${APPS_SCRIPT_URL}?${qs}`);
-    return res.json();
+    return _parseRespon(res);
   }
 
   async function apiPost(payload) {
@@ -391,7 +414,7 @@
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ token: TOKEN, ...payload })
     });
-    return res.json();
+    return _parseRespon(res);
   }
 
   function escapeHtml(str) {
@@ -494,6 +517,17 @@
     if (!fotoFile) {
       msg.className = 'form-msg err'; msg.textContent = 'Bukti karya wajib diunggah.'; return;
     }
+    // FIX: sebelumnya tidak ada validasi ukuran berkas di sisi client,
+    // padahal hint form menjanjikan maksimal ±5MB. Berkas besar (foto HP
+    // modern bisa >8MB) akan tetap dikonversi ke base64 & dikirim, makan
+    // waktu lama di koneksi lambat lalu gagal — muncul sebagai "kesalahan
+    // jaringan" padahal sebenarnya berkas terlalu besar. Dicegah lebih awal.
+    const MAKS_UKURAN_FOTO_MB = 5;
+    if (fotoFile.size > MAKS_UKURAN_FOTO_MB * 1024 * 1024) {
+      msg.className = 'form-msg err';
+      msg.textContent = `Ukuran berkas (${(fotoFile.size / (1024 * 1024)).toFixed(1)} MB) melebihi batas maksimum ${MAKS_UKURAN_FOTO_MB} MB. Silakan kompres atau pilih berkas lain.`;
+      return;
+    }
 
     btn.disabled = true; btn.textContent = 'Mengirim…';
     try {
@@ -521,7 +555,11 @@
         msg.className = 'form-msg err'; msg.textContent = resp.error;
       }
     } catch (err) {
-      msg.className = 'form-msg err'; msg.textContent = 'Terjadi kesalahan jaringan. Coba lagi.';
+      // FIX: sekarang err.message berasal dari _parseRespon / server (via
+      // Code.gs yang sudah dibungkus try-catch), jadi pesannya spesifik —
+      // bukan lagi teks generik yang menyembunyikan penyebab sebenarnya.
+      msg.className = 'form-msg err';
+      msg.textContent = err && err.message ? err.message : 'Terjadi kesalahan jaringan. Coba lagi.';
     } finally {
       btn.disabled = false; btn.textContent = 'Ajukan untuk Ditinjau';
     }
