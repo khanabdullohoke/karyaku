@@ -588,6 +588,70 @@
           <input type="text" id="fKeteranganPeran" placeholder="mis. Kelas XII TKJ 1 / Alumni Angkatan 2021 / Guru Produktif RPL">
         </div>
 
+        <!-- FIX KEAMANAN: data identitas & kontak wajib diisi sesuai peran
+             yang dipilih, agar Dewan Kurasi dapat memverifikasi keaslian
+             pengirim sebelum menyetujui karya. Blok kondisional (Alumni/
+             Siswa/Guru & Staf) disembunyikan/ditampilkan lewat
+             terapkanPeranForm() setiap kali pilihan Peran berubah. -->
+        <div class="form-section-label"><span class="dot"></span>Data Identitas & Kontak</div>
+        <div class="row2">
+          <div class="field">
+            <label>Nomor WhatsApp/Telepon Aktif <span id="fNoHpAsterisk">*</span></label>
+            <input type="tel" id="fNoHp" placeholder="mis. 08123456789">
+          </div>
+          <div class="field">
+            <label>Akun Media Sosial *</label>
+            <input type="text" id="fAkunMedsos" placeholder="mis. @nama_akun atau tautan profil" required>
+          </div>
+        </div>
+
+        <div id="wrapAlumniFields" style="display:none;">
+          <div class="row2">
+            <div class="field">
+              <label>Angkatan (Tahun Lulus) *</label>
+              <input type="number" id="fAngkatan" min="1980" max="2100" placeholder="mis. 2020">
+            </div>
+            <div class="field">
+              <label>Pekerjaan Sekarang *</label>
+              <input type="text" id="fPekerjaan" placeholder="mis. Software Engineer di PT ABC">
+            </div>
+          </div>
+          <div class="field">
+            <label>Domisili Saat Ini *</label>
+            <input type="text" id="fDomisili" placeholder="mis. Garut, Jawa Barat">
+          </div>
+        </div>
+
+        <div id="wrapSiswaFields" style="display:none;">
+          <div class="row2">
+            <div class="field">
+              <label>NISN *</label>
+              <input type="text" id="fNisn" inputmode="numeric" placeholder="mis. 0051234567">
+            </div>
+            <div class="field">
+              <label>Kelas *</label>
+              <input type="text" id="fKelas" placeholder="mis. XII TKJ 1">
+            </div>
+          </div>
+          <div class="field">
+            <label>Jurusan *</label>
+            <input type="text" id="fJurusan" placeholder="mis. Teknik Komputer dan Jaringan">
+          </div>
+        </div>
+
+        <div id="wrapGuruStafFields" style="display:none;">
+          <div class="row2">
+            <div class="field">
+              <label>NUPTK (boleh dikosongkan)</label>
+              <input type="text" id="fNuptk" inputmode="numeric" placeholder="opsional">
+            </div>
+            <div class="field">
+              <label>Mengajar Mata Pelajaran *</label>
+              <input type="text" id="fMapel" placeholder="mis. Pemrograman Web">
+            </div>
+          </div>
+        </div>
+
         <div class="form-section-label"><span class="dot"></span>Detail Karya</div>
         <div class="row2">
           <div class="field">
@@ -828,6 +892,39 @@
       </div>
     </div>
     <div class="field"><label>Keterangan Kedudukan</label><input type="text" id="eKeteranganPeran"></div>
+
+    <div class="form-section-label"><span class="dot"></span>Data Identitas & Kontak</div>
+    <div class="row2">
+      <div class="field">
+        <label>Nomor WhatsApp/Telepon Aktif <span id="eNoHpAsterisk">*</span></label>
+        <input type="tel" id="eNoHp">
+      </div>
+      <div class="field"><label>Akun Media Sosial *</label><input type="text" id="eAkunMedsos"></div>
+    </div>
+
+    <div id="eWrapAlumniFields" style="display:none;">
+      <div class="row2">
+        <div class="field"><label>Angkatan (Tahun Lulus) *</label><input type="number" id="eAngkatan" min="1980" max="2100"></div>
+        <div class="field"><label>Pekerjaan Sekarang *</label><input type="text" id="ePekerjaan"></div>
+      </div>
+      <div class="field"><label>Domisili Saat Ini *</label><input type="text" id="eDomisili"></div>
+    </div>
+
+    <div id="eWrapSiswaFields" style="display:none;">
+      <div class="row2">
+        <div class="field"><label>NISN *</label><input type="text" id="eNisn" inputmode="numeric"></div>
+        <div class="field"><label>Kelas *</label><input type="text" id="eKelas"></div>
+      </div>
+      <div class="field"><label>Jurusan *</label><input type="text" id="eJurusan"></div>
+    </div>
+
+    <div id="eWrapGuruStafFields" style="display:none;">
+      <div class="row2">
+        <div class="field"><label>NUPTK (boleh dikosongkan)</label><input type="text" id="eNuptk" inputmode="numeric"></div>
+        <div class="field"><label>Mengajar Mata Pelajaran *</label><input type="text" id="eMapel"></div>
+      </div>
+    </div>
+
     <div class="row2">
       <div class="field">
         <label>Kategori Karya *</label>
@@ -1106,11 +1203,26 @@
     const teksBagikan = `${item.judul} — karya ${item.nama} di Galeri KaryaKu, SMK Ciledug Al-Musaddadiyah.`;
     const url = urlHalamanIni();
 
-    // Di perangkat yang mendukung (kebanyakan HP), Web Share API membuka
-    // share-sheet asli OS — satu tap, tanpa perlu modal tambahan.
+    // FIX KRITIS — TOMBOL BAGIKAN TIDAK BERFUNGSI: sebelumnya navigator.share()
+    // dipanggil langsung lalu di-chain dengan .catch(), padahal .catch() hanya
+    // menangani PENOLAKAN PROMISE. Saat halaman ini ditanam di dalam <iframe>
+    // (mis. disematkan di halaman utama situs sekolah), banyak browser
+    // memblokir Web Share API lewat Permissions-Policy dan melempar exception
+    // SECARA SINKRON begitu navigator.share() dipanggil — sebelum Promise-nya
+    // sempat terbentuk. Exception sinkron itu tidak pernah sampai ke .catch(),
+    // sehingga seluruh fungsi berhenti di baris ini dan modal fallback
+    // (WA/Facebook/X/salin tautan) di bawah tidak pernah tampil — inilah
+    // sebabnya tombol "Bagikan" terlihat tidak merespons sama sekali saat
+    // diklik. Sekarang dibungkus try/catch: kalau navigator.share() gagal
+    // dengan cara apa pun, eksekusi tetap lanjut ke modal fallback di bawah.
     if (navigator.share) {
-      navigator.share({ title: item.judul, text: teksBagikan, url }).catch(() => {});
-      return;
+      try {
+        const hasilShare = navigator.share({ title: item.judul, text: teksBagikan, url });
+        if (hasilShare && typeof hasilShare.catch === 'function') hasilShare.catch(() => {});
+        return;
+      } catch (errShare) {
+        // Sengaja tidak berhenti di sini — lanjut ke modal fallback di bawah.
+      }
     }
 
     // Fallback untuk desktop/browser tanpa Web Share API: tampilkan modal
@@ -1157,6 +1269,50 @@
   document.getElementById('fKategori').addEventListener('change', (e) => {
     document.getElementById('wrapKategoriLainnya').style.display = e.target.value === 'Lainnya' ? 'block' : 'none';
   });
+
+  // FIX KEAMANAN: menampilkan & mewajibkan field identitas/kontak yang
+  // relevan sesuai peran yang dipilih (Alumni/Siswa/Guru & Staf), dipakai
+  // baik oleh formulir pengajuan (prefix 'f') maupun modal edit admin
+  // (prefix 'e'). Field yang disembunyikan (display:none pada wrapper)
+  // otomatis dikecualikan dari validasi HTML5 "required" oleh browser, jadi
+  // aman untuk mengatur ulang `required` tanpa cek tambahan.
+  function terapkanPeranForm(prefix, peran) {
+    const el = (id) => document.getElementById(prefix + id);
+    const wrapAlumni = document.getElementById((prefix === 'e' ? 'eWrap' : 'wrap') + 'AlumniFields');
+    const wrapSiswa = document.getElementById((prefix === 'e' ? 'eWrap' : 'wrap') + 'SiswaFields');
+    const wrapGuruStaf = document.getElementById((prefix === 'e' ? 'eWrap' : 'wrap') + 'GuruStafFields');
+    [wrapAlumni, wrapSiswa, wrapGuruStaf].forEach(w => { if (w) w.style.display = 'none'; });
+
+    ['Angkatan', 'Pekerjaan', 'Domisili', 'Nisn', 'Kelas', 'Jurusan', 'Nuptk', 'Mapel'].forEach(f => {
+      const input = el(f);
+      if (input) input.required = false;
+    });
+
+    const noHp = el('NoHp');
+    const noHpAsterisk = document.getElementById(prefix + 'NoHpAsterisk');
+
+    if (peran === 'Alumni') {
+      if (wrapAlumni) wrapAlumni.style.display = 'block';
+      ['Angkatan', 'Pekerjaan', 'Domisili'].forEach(f => { const i = el(f); if (i) i.required = true; });
+      if (noHp) noHp.required = true;
+      if (noHpAsterisk) noHpAsterisk.style.display = 'inline';
+    } else if (peran === 'Siswa') {
+      if (wrapSiswa) wrapSiswa.style.display = 'block';
+      ['Nisn', 'Kelas', 'Jurusan'].forEach(f => { const i = el(f); if (i) i.required = true; });
+      if (noHp) noHp.required = true;
+      if (noHpAsterisk) noHpAsterisk.style.display = 'inline';
+    } else if (peran === 'Guru' || peran === 'Staf') {
+      if (wrapGuruStaf) wrapGuruStaf.style.display = 'block';
+      const mapel = el('Mapel'); if (mapel) mapel.required = true;
+      if (noHp) noHp.required = false;
+      if (noHpAsterisk) noHpAsterisk.style.display = 'none';
+    } else {
+      if (noHp) noHp.required = false;
+      if (noHpAsterisk) noHpAsterisk.style.display = 'none';
+    }
+  }
+
+  document.getElementById('fPeran').addEventListener('change', (e) => terapkanPeranForm('f', e.target.value));
 
   document.getElementById('fFoto').addEventListener('change', (e) => {
     const file = e.target.files[0];
@@ -1215,6 +1371,16 @@
         deskripsi: document.getElementById('fDeskripsi').value.trim(),
         tanggalPencapaian: document.getElementById('fTanggal').value,
         tautan: document.getElementById('fTautan').value.trim(),
+        noHp: document.getElementById('fNoHp').value.trim(),
+        akunMedsos: document.getElementById('fAkunMedsos').value.trim(),
+        angkatan: document.getElementById('fAngkatan').value.trim(),
+        pekerjaanSekarang: document.getElementById('fPekerjaan').value.trim(),
+        domisili: document.getElementById('fDomisili').value.trim(),
+        nisn: document.getElementById('fNisn').value.trim(),
+        kelas: document.getElementById('fKelas').value.trim(),
+        jurusan: document.getElementById('fJurusan').value.trim(),
+        nuptk: document.getElementById('fNuptk').value.trim(),
+        mataPelajaran: document.getElementById('fMapel').value.trim(),
         foto: fotoBase64
       };
       const resp = await apiPost(payload);
@@ -1223,6 +1389,7 @@
         document.getElementById('formKarya').reset();
         document.getElementById('previewFoto').style.display = 'none';
         document.getElementById('wrapKategoriLainnya').style.display = 'none';
+        terapkanPeranForm('f', '');
       } else {
         msg.className = 'form-msg err'; msg.textContent = resp.error;
       }
@@ -1287,6 +1454,31 @@
   document.getElementById('tabMenunggu').addEventListener('click', () => bukaTabAdmin('menunggu'));
   document.getElementById('tabRiwayat').addEventListener('click', () => bukaTabAdmin('riwayat'));
 
+  // FIX KEAMANAN: menampilkan data identitas/kontak (hanya di panel
+  // admin ber-password) yang relevan sesuai peran, agar Dewan Kurasi bisa
+  // memverifikasi keaslian pengirim sebelum menyetujui/menolak karya.
+  function renderDataVerifikasi(item) {
+    const baris = [];
+    if (item.akunMedsos) baris.push(['Medsos', item.akunMedsos]);
+    if (item.noHp) baris.push(['No. HP', item.noHp]);
+    if (item.peran === 'Alumni') {
+      if (item.angkatan) baris.push(['Angkatan', item.angkatan]);
+      if (item.pekerjaanSekarang) baris.push(['Pekerjaan', item.pekerjaanSekarang]);
+      if (item.domisili) baris.push(['Domisili', item.domisili]);
+    } else if (item.peran === 'Siswa') {
+      if (item.nisn) baris.push(['NISN', item.nisn]);
+      if (item.kelas) baris.push(['Kelas', item.kelas]);
+      if (item.jurusan) baris.push(['Jurusan', item.jurusan]);
+    } else if (item.peran === 'Guru' || item.peran === 'Staf') {
+      if (item.nuptk) baris.push(['NUPTK', item.nuptk]);
+      if (item.mataPelajaran) baris.push(['Mapel', item.mataPelajaran]);
+    }
+    if (baris.length === 0) return '';
+    return `<div style="margin-top:10px;padding:10px 12px;background:var(--bg-alt);border-radius:var(--radius-sm);font-size:12.5px;color:var(--text-soft);display:flex;flex-wrap:wrap;gap:4px 16px;">
+      ${baris.map(([label, val]) => `<span><b style="color:var(--text);">${escapeHtml(label)}:</b> ${escapeHtml(val)}</span>`).join('')}
+    </div>`;
+  }
+
   async function muatDaftarMenunggu() {
     const wrap = document.getElementById('adminList');
     wrap.innerHTML = '<div class="empty-state">Memuat daftar pengajuan…</div>';
@@ -1319,6 +1511,7 @@
           </div>
         </div>
         <p style="font-size:13px;color:var(--text-soft);margin:12px 0 0;">${escapeHtml(item.deskripsi)}</p>
+        ${renderDataVerifikasi(item)}
         ${item.fotoBukti ? `<a href="${escapeHtml(item.fotoBukti)}" target="_blank" rel="noopener">Lihat bukti karya →</a>` : ''}
         <div class="admin-actions">
           <button class="approve" data-id="${item.id}" data-aksi="Disetujui"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>Setujui</button>
@@ -1357,10 +1550,13 @@
     riwayatOffset = offset;
     const wrap = document.getElementById('riwayatList');
     wrap.innerHTML = '<div class="empty-state">Memuat riwayat…</div>';
-    // Memakai endpoint publik yang sama dengan galeri (daftarKaryaPublik),
-    // karena data karya yang sudah "Disetujui" memang identik dengan yang
-    // tayang di galeri — tidak perlu endpoint terpisah untuk menampilkannya.
-    const resp = await apiGet('daftarKaryaPublik', { kategori: '', peran: '', cari: '', offset, limit: RIWAYAT_HALAMAN });
+    // FIX KEAMANAN: sebelumnya tab ini memakai endpoint PUBLIK yang sama
+    // dengan galeri (daftarKaryaPublik) — endpoint itu sengaja TIDAK PERNAH
+    // menyertakan data identitas (NoHp, akun medsos, NISN, dst — lihat
+    // _baseKaryaKePublik di backend), sehingga modal Edit di admin tidak
+    // bisa menampilkan/menyunting data tersebut. Sekarang memakai endpoint
+    // ber-password admin (daftarRiwayatAdmin) yang membaca seluruh kolom.
+    const resp = await apiPost({ aksi: 'daftarRiwayatAdmin', passwordAdmin: adminPassword, offset, limit: RIWAYAT_HALAMAN });
     if (!resp.ok) {
       wrap.innerHTML = `<div class="empty-state">Gagal memuat: ${escapeHtml(resp.error)}</div>`;
       document.getElementById('riwayatHalamanInfo').textContent = '';
@@ -1441,6 +1637,18 @@
     document.getElementById('ePeran').value = item.peran || '';
     document.getElementById('eKeteranganPeran').value = item.keteranganPeran || '';
 
+    terapkanPeranForm('e', item.peran || '');
+    document.getElementById('eNoHp').value = item.noHp || '';
+    document.getElementById('eAkunMedsos').value = item.akunMedsos || '';
+    document.getElementById('eAngkatan').value = item.angkatan || '';
+    document.getElementById('ePekerjaan').value = item.pekerjaanSekarang || '';
+    document.getElementById('eDomisili').value = item.domisili || '';
+    document.getElementById('eNisn').value = item.nisn || '';
+    document.getElementById('eKelas').value = item.kelas || '';
+    document.getElementById('eJurusan').value = item.jurusan || '';
+    document.getElementById('eNuptk').value = item.nuptk || '';
+    document.getElementById('eMapel').value = item.mataPelajaran || '';
+
     const eKategori = document.getElementById('eKategori');
     const eWrapLainnya = document.getElementById('eWrapKategoriLainnya');
     const eKategoriLainnya = document.getElementById('eKategoriLainnya');
@@ -1466,6 +1674,7 @@
   document.getElementById('eKategori').addEventListener('change', (e) => {
     document.getElementById('eWrapKategoriLainnya').style.display = e.target.value === 'Lainnya' ? 'block' : 'none';
   });
+  document.getElementById('ePeran').addEventListener('change', (e) => terapkanPeranForm('e', e.target.value));
 
   document.getElementById('btnSimpanEdit').addEventListener('click', async () => {
     const btn = document.getElementById('btnSimpanEdit');
@@ -1474,12 +1683,35 @@
     const eKategori = document.getElementById('eKategori').value;
     const eKategoriLainnya = document.getElementById('eKategoriLainnya').value.trim();
 
-    if (!document.getElementById('eNama').value.trim() || !document.getElementById('ePeran').value ||
+    const ePeranVal = document.getElementById('ePeran').value;
+
+    if (!document.getElementById('eNama').value.trim() || !ePeranVal ||
         !eKategori || !document.getElementById('eJudul').value.trim() || !document.getElementById('eDeskripsi').value.trim()) {
       msg.className = 'form-msg err'; msg.textContent = 'Lengkapi seluruh isian bertanda *.'; return;
     }
     if (eKategori === 'Lainnya' && !eKategoriLainnya) {
       msg.className = 'form-msg err'; msg.textContent = 'Sebutkan kategori lainnya.'; return;
+    }
+
+    // FIX KEAMANAN: modal Edit bukan elemen <form>, jadi atribut "required"
+    // pada field identitas TIDAK divalidasi otomatis oleh browser seperti di
+    // formulir pengajuan publik — divalidasi manual di sini sebagai lapisan
+    // pertama (backend tetap memvalidasi ulang sebagai lapisan terakhir).
+    if (!document.getElementById('eAkunMedsos').value.trim()) {
+      msg.className = 'form-msg err'; msg.textContent = 'Akun media sosial wajib diisi.'; return;
+    }
+    if (ePeranVal === 'Alumni' &&
+        (!document.getElementById('eAngkatan').value.trim() || !document.getElementById('ePekerjaan').value.trim() ||
+         !document.getElementById('eDomisili').value.trim() || !document.getElementById('eNoHp').value.trim())) {
+      msg.className = 'form-msg err'; msg.textContent = 'Lengkapi data Angkatan, Pekerjaan, Domisili, dan No. HP untuk peran Alumni.'; return;
+    }
+    if (ePeranVal === 'Siswa' &&
+        (!document.getElementById('eNisn').value.trim() || !document.getElementById('eKelas').value.trim() ||
+         !document.getElementById('eJurusan').value.trim() || !document.getElementById('eNoHp').value.trim())) {
+      msg.className = 'form-msg err'; msg.textContent = 'Lengkapi data NISN, Kelas, Jurusan, dan No. HP untuk peran Siswa.'; return;
+    }
+    if ((ePeranVal === 'Guru' || ePeranVal === 'Staf') && !document.getElementById('eMapel').value.trim()) {
+      msg.className = 'form-msg err'; msg.textContent = 'Lengkapi Mata Pelajaran untuk peran Guru/Staf.'; return;
     }
 
     btn.disabled = true; btn.textContent = 'Menyimpan…';
@@ -1489,14 +1721,24 @@
         passwordAdmin: adminPassword,
         id,
         nama: document.getElementById('eNama').value.trim(),
-        peran: document.getElementById('ePeran').value,
+        peran: ePeranVal,
         keteranganPeran: document.getElementById('eKeteranganPeran').value.trim(),
         kategori: eKategori,
         kategoriLainnya: eKategoriLainnya,
         judul: document.getElementById('eJudul').value.trim(),
         deskripsi: document.getElementById('eDeskripsi').value.trim(),
         tanggalPencapaian: document.getElementById('eTanggal').value,
-        tautan: document.getElementById('eTautan').value.trim()
+        tautan: document.getElementById('eTautan').value.trim(),
+        noHp: document.getElementById('eNoHp').value.trim(),
+        akunMedsos: document.getElementById('eAkunMedsos').value.trim(),
+        angkatan: document.getElementById('eAngkatan').value.trim(),
+        pekerjaanSekarang: document.getElementById('ePekerjaan').value.trim(),
+        domisili: document.getElementById('eDomisili').value.trim(),
+        nisn: document.getElementById('eNisn').value.trim(),
+        kelas: document.getElementById('eKelas').value.trim(),
+        jurusan: document.getElementById('eJurusan').value.trim(),
+        nuptk: document.getElementById('eNuptk').value.trim(),
+        mataPelajaran: document.getElementById('eMapel').value.trim()
       };
       const fotoFile = document.getElementById('eFoto').files[0];
       if (fotoFile) payload.foto = await fileKeBase64(fotoFile);
