@@ -75,8 +75,11 @@
   .filters input[type="text"]{flex:1;min-width:200px;}
 
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px;}
-  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:transform .15s, box-shadow .15s;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:transform .15s, box-shadow .15s;overflow:hidden;}
   .card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(11,61,145,.1);}
+  .card-thumb-wrap{margin:-20px -20px 2px -20px;width:calc(100% + 40px);height:150px;background:var(--bg-alt);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+  .card-thumb-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+  .card-thumb-fallback{font-size:34px;color:var(--line);}
   .card .kategori-badge{display:inline-flex;align-self:flex-start;background:#eaf1ff;color:var(--navy);font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;}
   .card .peran-badge{display:inline-flex;align-self:flex-start;background:#fff3e0;color:var(--gold-dark);font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;margin-left:6px;}
   .card h3{font-size:17px;margin:2px 0 0;color:var(--text);}
@@ -438,6 +441,9 @@
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
+        <div class="card-thumb-wrap">
+          ${item.fotoBuktiPreview ? `<img src="${escapeHtml(item.fotoBuktiPreview)}" alt="${escapeHtml(item.judul)}" loading="lazy" onerror="this.parentElement.innerHTML='<span class=\\'card-thumb-fallback\\'>🖼️</span>'">` : `<span class="card-thumb-fallback">🖼️</span>`}
+        </div>
         <div><span class="kategori-badge">${escapeHtml(item.kategori)}</span><span class="peran-badge">${escapeHtml(item.peran)}</span></div>
         <h3>${escapeHtml(item.judul)}</h3>
         <div class="nama">${escapeHtml(item.nama)}${item.keteranganPeran ? ' · ' + escapeHtml(item.keteranganPeran) : ''}</div>
