@@ -6,7 +6,8 @@
 <meta name="theme-color" content="#1d56b3">
 <title>KaryaKu — Jejak Digital Karya SMK Ciledug Al-Musaddadiyah</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --navy:#1d56b3;
@@ -87,6 +88,7 @@
   .card .ringkas{font-size:13.5px;color:var(--text-soft);flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}
   .card .tanggal{font-size:12px;color:var(--gold-dark);font-weight:600;}
   .empty-state{border:1.5px dashed var(--line);border-radius:var(--radius);padding:44px;text-align:center;color:var(--text-soft);background:#fff;}
+  #btnMuatLebih:disabled{opacity:.55;cursor:not-allowed;}
 
   /* Stat bar */
   .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;}
@@ -208,6 +210,9 @@
       <input type="text" id="filterCari" placeholder="Telusuri berdasarkan judul, nama, atau kata kunci...">
     </div>
     <div class="grid" id="grid"></div>
+    <div style="text-align:center;margin-top:28px;">
+      <button id="btnMuatLebih" class="btn-pill outline" style="display:none;">Muat Lebih Banyak</button>
+    </div>
   </div>
 </section>
 
@@ -436,25 +441,65 @@
     return String(str || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   }
 
+  // PERFORMA: fotoBuktiPreview dari backend selalu memakai sz=w1600 (dibuat
+  // generik agar cocok untuk semua konteks). Padahal di kartu galeri gambar
+  // cuma tampil ~270x150px — meminta w1600 untuk itu memboroskan bandwidth
+  // beberapa kali lipat dari yang dibutuhkan, terutama saat banyak kartu
+  // dimuat sekaligus. Fungsi ini menimpa parameter sz sesuai ukuran tampil
+  // aktualnya (mempertimbangkan layar HiDPI ~2x), tanpa perlu ubah backend.
+  function urlThumbUkuran(url, lebarPx) {
+    if (!url) return url;
+    return url.replace(/([?&]sz=)w\d+/, `$1w${lebarPx}`);
+  }
+
   // ---------------- Galeri publik ----------------
-  async function muatGaleri() {
+  const UKURAN_HALAMAN_GALERI = 9;
+  let offsetGaleri = 0;
+  let sedangMuatGaleri = false;
+
+  async function muatGaleri(reset = true) {
+    if (sedangMuatGaleri) return;
+    sedangMuatGaleri = true;
+
     const grid = document.getElementById('grid');
-    grid.innerHTML = '<div class="empty-state">Memuat karya…</div>';
+    const btnMuatLebih = document.getElementById('btnMuatLebih');
+
+    if (reset) {
+      offsetGaleri = 0;
+      grid.innerHTML = '<div class="empty-state">Memuat karya…</div>';
+      btnMuatLebih.style.display = 'none';
+    } else {
+      btnMuatLebih.disabled = true;
+      btnMuatLebih.textContent = 'Memuat…';
+    }
+
     const kategori = document.getElementById('filterKategori').value;
     const peran = document.getElementById('filterPeran').value;
     const cari = document.getElementById('filterCari').value;
 
-    const resp = await apiGet('daftarKaryaPublik', { kategori, peran, cari });
-    if (!resp.ok) { grid.innerHTML = `<div class="empty-state">Gagal memuat: ${escapeHtml(resp.error)}</div>`; return; }
-    if (resp.data.length === 0) { grid.innerHTML = '<div class="empty-state">Belum terdapat karya pada kriteria ini. Jadilah kontributor pertama yang mengabadikan karyanya di sini.</div>'; return; }
+    const resp = await apiGet('daftarKaryaPublik', { kategori, peran, cari, offset: offsetGaleri, limit: UKURAN_HALAMAN_GALERI });
+    sedangMuatGaleri = false;
 
-    grid.innerHTML = '';
+    if (!resp.ok) {
+      grid.innerHTML = `<div class="empty-state">Gagal memuat: ${escapeHtml(resp.error)}</div>`;
+      btnMuatLebih.style.display = 'none';
+      return;
+    }
+
+    if (reset) grid.innerHTML = '';
+
+    if (reset && resp.data.length === 0) {
+      grid.innerHTML = '<div class="empty-state">Belum terdapat karya pada kriteria ini. Jadilah kontributor pertama yang mengabadikan karyanya di sini.</div>';
+      btnMuatLebih.style.display = 'none';
+      return;
+    }
+
     resp.data.forEach(item => {
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
         <div class="card-thumb-wrap">
-          ${item.fotoBuktiPreview ? `<img src="${escapeHtml(item.fotoBuktiPreview)}" alt="${escapeHtml(item.judul)}" loading="lazy" onerror="this.parentElement.innerHTML='<span class=\\'card-thumb-fallback\\'>🖼️</span>'">` : `<span class="card-thumb-fallback">🖼️</span>`}
+          ${item.fotoBuktiPreview ? `<img src="${escapeHtml(urlThumbUkuran(item.fotoBuktiPreview, 450))}" alt="${escapeHtml(item.judul)}" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<span class=\\'card-thumb-fallback\\'>🖼️</span>'">` : `<span class="card-thumb-fallback">🖼️</span>`}
         </div>
         <div><span class="kategori-badge">${escapeHtml(item.kategori)}</span><span class="peran-badge">${escapeHtml(item.peran)}</span></div>
         <h3>${escapeHtml(item.judul)}</h3>
@@ -465,13 +510,20 @@
       card.addEventListener('click', () => bukaDetail(item));
       grid.appendChild(card);
     });
+
+    offsetGaleri += resp.data.length;
+    btnMuatLebih.disabled = false;
+    btnMuatLebih.textContent = 'Muat Lebih Banyak';
+    btnMuatLebih.style.display = resp.hasMore ? 'inline-flex' : 'none';
   }
+
+  document.getElementById('btnMuatLebih').addEventListener('click', () => muatGaleri(false));
 
   function bukaDetail(item) {
     document.getElementById('detailBody').innerHTML = `
       <div class="detail-hero">
         <span class="detail-hero-icon">📄</span>
-        ${item.fotoBuktiPreview ? `<img src="${escapeHtml(item.fotoBuktiPreview)}" alt="${escapeHtml(item.judul)}" onerror="this.remove()">` : ''}
+        ${item.fotoBuktiPreview ? `<img src="${escapeHtml(urlThumbUkuran(item.fotoBuktiPreview, 900))}" alt="${escapeHtml(item.judul)}" decoding="async" onerror="this.remove()">` : ''}
       </div>
       <div class="detail-badges">
         <span class="kategori-badge">${escapeHtml(item.kategori)}</span>
@@ -489,12 +541,12 @@
     document.getElementById('overlayDetail').classList.add('show');
   }
 
-  document.getElementById('filterPeran').addEventListener('change', muatGaleri);
-  document.getElementById('filterKategori').addEventListener('change', muatGaleri);
+  document.getElementById('filterPeran').addEventListener('change', () => muatGaleri(true));
+  document.getElementById('filterKategori').addEventListener('change', () => muatGaleri(true));
   let waktuKetik;
   document.getElementById('filterCari').addEventListener('input', () => {
     clearTimeout(waktuKetik);
-    waktuKetik = setTimeout(muatGaleri, 400);
+    waktuKetik = setTimeout(() => muatGaleri(true), 400);
   });
 
   // ---------------- Statistik ----------------
