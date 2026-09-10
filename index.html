@@ -82,9 +82,18 @@
   .hero-art{position:relative;}
   .hero-art svg{width:100%;height:auto;display:block;}
   .hero-strip{border-top:1px solid var(--line);background:#fff;}
-  .hero-strip .wrap{display:flex;flex-wrap:wrap;gap:0;justify-content:space-between;padding:16px 24px;}
-  .hero-strip-item{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--text-soft);font-weight:500;padding:6px 14px;}
+  .hero-strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);align-items:stretch;padding:0;}
+  .hero-strip-item{display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;font-size:12.5px;color:var(--text-soft);font-weight:500;padding:14px 12px;border-left:1px solid var(--line);}
+  .hero-strip-item:first-child{border-left:none;}
   .hero-strip-item svg{flex-shrink:0;color:var(--gold-dark);}
+  @media (max-width:860px){
+    .hero-strip .wrap{grid-template-columns:repeat(2,1fr);}
+    .hero-strip-item{font-size:11.5px;gap:6px;padding:12px 8px;}
+    .hero-strip-item:nth-child(3){border-left:none;}
+    .hero-strip-item:nth-child(1),.hero-strip-item:nth-child(2){border-bottom:1px solid var(--line);}
+    .hero-strip-item svg{width:14px;height:14px;}
+  }
+  @media (max-width:420px){.hero-strip-item{font-size:10.8px;padding:11px 6px;}}
 
   section{padding:64px 0;}
   section.alt{background:var(--bg-alt);}
@@ -119,6 +128,23 @@
   #btnMuatLebih:disabled{opacity:.55;cursor:not-allowed;}
   .kategori-badge{display:inline-flex;align-items:center;background:#eaf1ff;color:var(--navy);font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;}
   .peran-badge{display:inline-flex;align-items:center;background:#fff3e0;color:var(--gold-dark);font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;margin-left:6px;}
+
+  /* Tombol share pada kartu galeri */
+  .card-share-btn{position:absolute;right:10px;bottom:10px;z-index:4;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:none;display:flex;align-items:center;justify-content:center;color:var(--navy);box-shadow:0 3px 10px rgba(11,61,145,.2);transition:transform .15s,background .15s,color .15s;}
+  .card-share-btn:hover{background:var(--navy);color:#fff;transform:scale(1.08);}
+
+  /* Baris share pada modal detail karya */
+  .detail-share{display:flex;align-items:center;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid var(--line);flex-wrap:nowrap;overflow-x:auto;}
+  .detail-share-label{font-size:12.5px;font-weight:600;color:var(--text-soft);flex-shrink:0;white-space:nowrap;}
+  .detail-share-icons{display:flex;gap:8px;flex-shrink:0;}
+  .share-icon-btn{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;color:var(--text-soft);transition:transform .15s,background .15s,color .15s,border-color .15s;}
+  .share-icon-btn:hover{transform:translateY(-2px);}
+  .share-icon-btn.wa:hover{background:#25d366;border-color:#25d366;color:#fff;}
+  .share-icon-btn.fb:hover{background:#1877f2;border-color:#1877f2;color:#fff;}
+  .share-icon-btn.x:hover{background:#000;border-color:#000;color:#fff;}
+  .share-icon-btn.copy:hover{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .share-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:var(--navy-ink);color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:999px;box-shadow:0 10px 28px rgba(6,28,71,.3);z-index:80;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;}
+  .share-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
   /* Stat bar */
   .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;}
@@ -235,6 +261,32 @@
   .admin-summary .pill b{color:var(--navy);font-family:'Poppins',sans-serif;font-size:14px;}
   .admin-summary .pill.warn b{color:#c0392b;}
 
+  /* Tab panel admin: Menunggu Peninjauan / Riwayat Disetujui */
+  .admin-tabs{display:flex;gap:6px;background:var(--bg-alt);border-radius:999px;padding:4px;margin-bottom:18px;}
+  .admin-tab-btn{flex:1;border:none;background:transparent;color:var(--text-soft);font-size:13px;font-weight:600;padding:9px 12px;border-radius:999px;transition:background .15s,color .15s;}
+  .admin-tab-btn.active{background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(11,61,145,.12);}
+
+  /* Kartu riwayat karya disetujui */
+  .history-item{display:flex;gap:14px;border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:12px;background:#fff;}
+  .history-thumb{flex-shrink:0;width:76px;height:76px;border-radius:var(--radius-sm);background:linear-gradient(135deg,#eef3fc,#e3ebf9);overflow:hidden;display:flex;align-items:center;justify-content:center;color:#c3d2ee;}
+  .history-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .history-body{flex:1;min-width:0;}
+  .history-body h4{margin:0 0 3px;font-size:14.5px;color:var(--text);font-family:'Poppins',sans-serif;line-height:1.3;}
+  .history-meta{font-size:12px;color:var(--text-soft);margin-bottom:8px;}
+  .history-actions{display:flex;gap:8px;flex-wrap:wrap;}
+  .history-actions button{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;border:1px solid var(--line);font-size:12.5px;font-weight:600;background:#fff;transition:opacity .15s;}
+  .history-actions button:hover{opacity:.85;}
+  .history-actions .edit{color:var(--navy);border-color:#c9d8f4;background:#eaf1ff;}
+  .history-actions .delete{color:#c0392b;background:#fff;}
+  .detail-verified.riwayat{margin-left:0;}
+
+  /* Paginasi Sebelumnya/Selanjutnya */
+  .admin-pagination{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;}
+  .admin-pagination button{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:999px;border:1.5px solid var(--navy);color:var(--navy);background:#fff;font-size:13px;font-weight:600;}
+  .admin-pagination button:hover:not(:disabled){background:var(--navy);color:#fff;}
+  .admin-pagination button:disabled{opacity:.4;cursor:not-allowed;}
+  .admin-pagination .halaman-info{font-size:12.5px;color:var(--text-soft);font-weight:600;}
+
   .overlay{position:fixed;inset:0;background:rgba(6,28,71,.62);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;z-index:50;}
   .overlay.show{display:flex;}
   @keyframes modalIn{from{opacity:0;transform:translateY(14px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
@@ -258,6 +310,9 @@
   .detail-desc{font-size:14.5px;color:var(--text);line-height:1.75;white-space:pre-line;margin:0 0 20px;}
   .detail-linkbtn{display:inline-flex;align-items:center;gap:6px;background:var(--bg-alt);color:var(--navy);font-weight:600;font-size:13.5px;padding:10px 18px;border-radius:999px;text-decoration:none;border:1px solid var(--line);}
   .detail-linkbtn:hover{background:#eaf1ff;}
+  .detail-linkbtn.share{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .detail-linkbtn.share:hover{background:var(--navy-dark);}
+  .detail-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
 
 </style>
 </head>
@@ -293,7 +348,7 @@
       <a href="#galeri">Telusuri Karya</a>
       <a href="#statistik">Pencapaian</a>
       <a href="#faq">FAQ</a>
-      <a href="#" id="btnBukaAdmin">Admin</a>
+      <a href="#" id="btnBukaAdmin">Portal Kurasi</a>
       <a href="#upload" class="btn-pill gold">Ajukan Karya</a>
     </div>
   </div>
@@ -307,7 +362,7 @@
       <p class="lead">KaryaKu adalah wahana digital bagi guru, tenaga kependidikan, peserta didik, dan alumni
          SMKS Ciledug Al-Musaddadiyah untuk mendokumentasikan capaian akademik maupun non-akademik — mulai dari
          prestasi kompetisi, karya tulis ilmiah, karya seni, sertifikasi kompetensi, hingga hasil penelitian.
-         Setiap pengajuan ditelaah admin sekolah paling lambat <strong>1×24 jam</strong> sebelum tayang di galeri.</p>
+         Setiap pengajuan ditelaah oleh Dewan Kurasi Akademik paling lambat <strong>1×24 jam</strong> sebelum tayang di galeri.</p>
       <div class="hero-ctas">
         <a href="#upload" class="btn-pill solid">Ajukan Karya Anda</a>
         <a href="#galeri" class="btn-pill outline">Telusuri Galeri Karya</a>
@@ -353,7 +408,7 @@
   </div>
   <div class="hero-strip">
     <div class="wrap">
-      <span class="hero-strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"></path></svg>Ditinjau langsung oleh admin sekolah</span>
+      <span class="hero-strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"></path></svg>Ditelaah langsung oleh Dewan Kurasi Akademik</span>
       <span class="hero-strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg>Proses pengajuan hanya 5 menit</span>
       <span class="hero-strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" opacity="0"></path><path d="M4 7h16M4 12h10M4 17h7"></path></svg>Terbuka untuk Guru, Staf, Siswa &amp; Alumni</span>
       <span class="hero-strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>Data &amp; berkas bukti tersimpan aman</span>
@@ -378,8 +433,8 @@
       <div class="step-card">
         <div class="step-num">2</div>
         <div class="step-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg></div>
-        <h3>Ditelaah admin</h3>
-        <p>Tim admin sekolah memverifikasi kelengkapan dan keaslian data paling lambat dalam 1×24 jam.</p>
+        <h3>Kurasi &amp; Verifikasi</h3>
+        <p>Dewan Kurasi Akademik memverifikasi kelengkapan dan keaslian data paling lambat dalam 1×24 jam.</p>
       </div>
       <div class="step-card">
         <div class="step-num">3</div>
@@ -474,13 +529,13 @@
     <div class="fitur-grid">
       <div class="fitur-item">
         <div class="f-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"></path><path d="M9 12l2 2 4-4"></path></svg></div>
-        <h4>Terverifikasi Admin</h4>
-        <p>Setiap karya ditelaah manual sebelum tayang, sehingga isi galeri terjaga keasliannya.</p>
+        <h4>Kurasi Editorial</h4>
+        <p>Setiap karya ditelaah secara saksama oleh Dewan Kurasi sebelum tayang, menjaga keaslian dan mutu isi galeri.</p>
       </div>
       <div class="fitur-item">
         <div class="f-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg></div>
         <h4>Tinjauan Cepat</h4>
-        <p>Batas waktu peninjauan maksimal 1×24 jam, dengan pengingat otomatis bagi admin.</p>
+        <p>Batas waktu penelaahan maksimal 1×24 jam, dengan pengingat otomatis bagi Dewan Kurasi.</p>
       </div>
       <div class="fitur-item">
         <div class="f-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg></div>
@@ -502,7 +557,7 @@
       <span class="eyebrow">Pengajuan Karya</span>
       <h2>Dokumentasikan <em>Capaian Anda</em></h2>
       <p>Lengkapi formulir berikut dengan saksama. Karya Anda akan dipublikasikan pada galeri setelah melalui
-      proses tinjauan admin, paling lambat dalam waktu 1×24 jam.</p>
+      proses kurasi oleh Dewan Kurasi Akademik, paling lambat dalam waktu 1×24 jam.</p>
     </div>
     <div class="panel">
       <div class="panel-header">
@@ -603,7 +658,7 @@
       </details>
       <details class="faq-item">
         <summary>Berapa lama proses peninjauan berlangsung? <span class="faq-plus">+</span></summary>
-        <div class="faq-a">Admin sekolah menargetkan peninjauan selesai dalam waktu maksimal 1×24 jam sejak karya diajukan. Sistem juga mengirim pengingat otomatis kepada admin apabila ada pengajuan yang melewati batas waktu tersebut.</div>
+        <div class="faq-a">Dewan Kurasi Akademik menargetkan penelaahan selesai dalam waktu maksimal 1×24 jam sejak karya diajukan. Sistem juga mengirim pengingat otomatis kepada Dewan Kurasi apabila ada pengajuan yang melewati batas waktu tersebut.</div>
       </details>
       <details class="faq-item">
         <summary>Format dan ukuran berkas bukti apa yang diterima? <span class="faq-plus">+</span></summary>
@@ -611,15 +666,15 @@
       </details>
       <details class="faq-item">
         <summary>Apakah karya yang ditolak bisa diajukan ulang? <span class="faq-plus">+</span></summary>
-        <div class="faq-a">Bisa. Admin akan menyertakan catatan alasan penolakan. Setelah kekurangan dilengkapi atau diperbaiki, karya dapat diajukan kembali melalui formulir yang sama.</div>
+        <div class="faq-a">Bisa. Dewan Kurasi akan menyertakan catatan alasan penolakan. Setelah kekurangan dilengkapi atau diperbaiki, karya dapat diajukan kembali melalui formulir yang sama.</div>
       </details>
       <details class="faq-item">
         <summary>Apakah data pribadi dan berkas saya aman? <span class="faq-plus">+</span></summary>
-        <div class="faq-a">Ya. Seluruh data dan berkas bukti tersimpan pada sistem resmi sekolah dan hanya dapat diakses oleh admin yang berwenang untuk keperluan verifikasi dan publikasi karya.</div>
+        <div class="faq-a">Ya. Seluruh data dan berkas bukti tersimpan pada sistem resmi sekolah dan hanya dapat diakses oleh pihak berwenang di lingkungan sekolah untuk keperluan verifikasi dan publikasi karya.</div>
       </details>
       <details class="faq-item">
         <summary>Ke mana saya menghubungi jika mengalami kendala? <span class="faq-plus">+</span></summary>
-        <div class="faq-a">Silakan hubungi admin sekolah melalui kontak yang tertera pada bagian bawah halaman ini, atau kunjungi laman resmi SMKS Ciledug Al-Musaddadiyah untuk informasi lebih lanjut.</div>
+        <div class="faq-a">Silakan hubungi pihak sekolah melalui kontak yang tertera pada bagian bawah halaman ini, atau kunjungi laman resmi SMKS Ciledug Al-Musaddadiyah untuk informasi lebih lanjut.</div>
       </details>
     </div>
   </div>
@@ -683,7 +738,7 @@
     </div>
     <div class="footer-bottom">
       <span>© <span id="tahunFooter"></span> SMK Ciledug Al-Musaddadiyah · KaryaKu</span>
-      <span>Karya dipublikasikan setelah melalui tinjauan admin (maksimal 1×24 jam)</span>
+      <span>Karya dipublikasikan setelah melalui kurasi akademik (maksimal 1×24 jam)</span>
     </div>
   </div>
 </footer>
@@ -696,15 +751,35 @@
   </div>
 </div>
 
+<!-- Modal bagikan karya -->
+<div class="overlay" id="overlayShare">
+  <div class="modal" style="max-width:380px;">
+    <button class="modal-close" data-close>&times;</button>
+    <div class="modal-header">
+      <span class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"></path></svg></span>
+      <div><h3>Bagikan Karya</h3><p id="shareJudul">Sebarkan karya ini ke rekan Anda</p></div>
+    </div>
+    <div class="detail-share">
+      <div class="detail-share-icons" style="gap:12px;">
+        <a class="share-icon-btn wa" id="shareWa" target="_blank" rel="noopener" title="Bagikan ke WhatsApp" aria-label="Bagikan ke WhatsApp"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1s-.7.9-.9 1-.3.2-.6.1a7.6 7.6 0 01-2.2-1.4 8.4 8.4 0 01-1.5-1.9c-.2-.3 0-.4.1-.6l.4-.5c.1-.1.2-.3.2-.4a.5.5 0 000-.5c-.1-.1-.6-1.5-.8-2.1-.2-.5-.4-.5-.6-.5h-.5a1 1 0 00-.7.3 3 3 0 00-1 2.2c0 1.3 1 2.6 1.1 2.8.1.1 2 3.1 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.3-.1-.1-.2-.2-.5-.3z"></path><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1112 20.2z"></path></svg></a>
+        <a class="share-icon-btn fb" id="shareFb" target="_blank" rel="noopener" title="Bagikan ke Facebook" aria-label="Bagikan ke Facebook"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0022 12z"></path></svg></a>
+        <a class="share-icon-btn x" id="shareX" target="_blank" rel="noopener" title="Bagikan ke X" aria-label="Bagikan ke X"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2 2h3.3l-7.2 8.2L23 22h-6.6l-5.2-6.8L5.2 22H1.9l7.7-8.8L1 2h6.8l4.7 6.2L18.2 2zm-1.2 18h1.8L7.1 4H5.2l11.8 16z"></path></svg></a>
+        <button type="button" class="share-icon-btn copy" id="shareCopy" title="Salin tautan" aria-label="Salin tautan"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="share-toast" id="shareToast">Tautan disalin ke clipboard</div>
+
 <!-- Modal login admin -->
 <div class="overlay" id="overlayAdminLogin">
   <div class="modal">
     <button class="modal-close" data-close>&times;</button>
     <div class="modal-header">
       <span class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg></span>
-      <div><h3>Autentikasi Admin</h3><p>Masukkan kata sandi untuk mengelola pengajuan karya.</p></div>
+      <div><h3>Portal Kurasi</h3><p>Masukkan kata sandi akses untuk mengelola pengajuan karya.</p></div>
     </div>
-    <div class="field"><label>Password Admin</label><input type="password" id="adminPasswordInput"></div>
+    <div class="field"><label>Kata Sandi Akses</label><input type="password" id="adminPasswordInput"></div>
     <button class="submit-btn" id="btnAdminLogin">Masuk</button>
     <div class="form-msg" id="adminLoginMsg"></div>
   </div>
@@ -716,9 +791,74 @@
     <button class="modal-close" data-close>&times;</button>
     <div class="modal-header">
       <span class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg></span>
-      <div><h3>Karya Menunggu Peninjauan</h3><p>Setujui, tolak, atau hapus pengajuan yang masuk.</p></div>
+      <div><h3 id="adminPanelTitle">Karya Menunggu Peninjauan</h3><p id="adminPanelDesc">Setujui, tolak, atau hapus pengajuan yang masuk.</p></div>
+    </div>
+    <div class="admin-tabs">
+      <button type="button" class="admin-tab-btn active" id="tabMenunggu">Menunggu Peninjauan</button>
+      <button type="button" class="admin-tab-btn" id="tabRiwayat">Riwayat Disetujui</button>
     </div>
     <div id="adminList"></div>
+    <div id="adminRiwayat" style="display:none;">
+      <div id="riwayatList"></div>
+      <div class="admin-pagination">
+        <button type="button" id="btnRiwayatSebelumnya">← Sebelumnya</button>
+        <span class="halaman-info" id="riwayatHalamanInfo"></span>
+        <button type="button" id="btnRiwayatSelanjutnya">Selanjutnya →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal edit karya (dari tab Riwayat) -->
+<div class="overlay" id="overlayEditKarya">
+  <div class="modal">
+    <button class="modal-close" data-close>&times;</button>
+    <div class="modal-header">
+      <span class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"></path></svg></span>
+      <div><h3>Edit Karya</h3><p>Perbarui data karya yang sudah tayang di galeri publik.</p></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Nama *</label><input type="text" id="eNama" required></div>
+      <div class="field">
+        <label>Peran *</label>
+        <select id="ePeran" required>
+          <option value="">Pilih peran</option>
+          <option>Guru</option><option>Staf</option><option>Siswa</option><option>Alumni</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Keterangan Kedudukan</label><input type="text" id="eKeteranganPeran"></div>
+    <div class="row2">
+      <div class="field">
+        <label>Kategori Karya *</label>
+        <select id="eKategori" required>
+          <option value="">Pilih kategori</option>
+          <option>Prestasi Lomba</option>
+          <option>Publikasi/Karya Tulis</option>
+          <option>Karya Seni</option>
+          <option>Sertifikasi</option>
+          <option>Penelitian</option>
+          <option>Lainnya</option>
+        </select>
+      </div>
+      <div class="field" id="eWrapKategoriLainnya" style="display:none;">
+        <label>Sebutkan Kategori Lainnya *</label>
+        <input type="text" id="eKategoriLainnya">
+      </div>
+    </div>
+    <div class="field"><label>Judul Karya/Pencapaian *</label><input type="text" id="eJudul" required></div>
+    <div class="field"><label>Deskripsi *</label><textarea id="eDeskripsi" required></textarea></div>
+    <div class="row2">
+      <div class="field"><label>Tanggal Pencapaian</label><input type="date" id="eTanggal"></div>
+      <div class="field"><label>Tautan Pendukung (opsional)</label><input type="url" id="eTautan"></div>
+    </div>
+    <div class="field">
+      <label>Ganti Bukti Karya (opsional)</label>
+      <input type="file" id="eFoto" accept="image/*,application/pdf">
+      <div class="hint">Kosongkan bila foto/bukti yang sudah ada tidak perlu diganti.</div>
+    </div>
+    <button type="button" class="submit-btn" id="btnSimpanEdit">Simpan Perubahan</button>
+    <div class="form-msg" id="editMsg"></div>
   </div>
 </div>
 
@@ -898,6 +1038,7 @@
             <span class="thumb-badge">${escapeHtml(item.kategori)}</span>
             <span class="thumb-badge peran">${escapeHtml(item.peran)}</span>
           </div>
+          <button type="button" class="card-share-btn" title="Bagikan karya ini" aria-label="Bagikan karya ini"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"></path></svg></button>
         </div>
         <div class="card-body">
           <h3>${escapeHtml(item.judul)}</h3>
@@ -907,6 +1048,10 @@
         </div>
       `;
       card.addEventListener('click', () => bukaDetail(item));
+      card.querySelector('.card-share-btn').addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        bagikanKarya(item);
+      });
       grid.appendChild(card);
     });
 
@@ -927,7 +1072,7 @@
       <div class="detail-badges">
         <span class="kategori-badge">${escapeHtml(item.kategori)}</span>
         <span class="peran-badge">${escapeHtml(item.peran)}</span>
-        ${item.disetujuiPada ? `<span class="detail-verified">✓ Terverifikasi Admin</span>` : ''}
+        ${item.disetujuiPada ? `<span class="detail-verified">✓ Terverifikasi Resmi</span>` : ''}
       </div>
       <h2 class="detail-title">${escapeHtml(item.judul)}</h2>
       <div class="detail-meta">
@@ -935,9 +1080,57 @@
         ${item.tanggalPencapaian ? `<span>🗓️ ${escapeHtml(item.tanggalPencapaian)}</span>` : ''}
       </div>
       <p class="detail-desc">${escapeHtml(item.deskripsi)}</p>
-      ${item.tautan ? `<a class="detail-linkbtn" href="${escapeHtml(item.tautan)}" target="_blank" rel="noopener">🔗 Tautan Pendukung</a>` : ''}
+      <div class="detail-actions">
+        ${item.tautan ? `<a class="detail-linkbtn" href="${escapeHtml(item.tautan)}" target="_blank" rel="noopener">🔗 Tautan Pendukung</a>` : ''}
+        <button type="button" class="detail-linkbtn share" id="btnBagikanDetail"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"></path></svg>Bagikan Karya</button>
+      </div>
     `;
+    document.getElementById('btnBagikanDetail').addEventListener('click', () => bagikanKarya(item));
     document.getElementById('overlayDetail').classList.add('show');
+  }
+
+  // ---------------- Bagikan karya ke media sosial ----------------
+  function urlHalamanIni() {
+    return window.location.href.split('#')[0];
+  }
+
+  function tampilkanToast(teks) {
+    const toast = document.getElementById('shareToast');
+    toast.textContent = teks;
+    toast.classList.add('show');
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  function bagikanKarya(item) {
+    const teksBagikan = `${item.judul} — karya ${item.nama} di Galeri KaryaKu, SMK Ciledug Al-Musaddadiyah.`;
+    const url = urlHalamanIni();
+
+    // Di perangkat yang mendukung (kebanyakan HP), Web Share API membuka
+    // share-sheet asli OS — satu tap, tanpa perlu modal tambahan.
+    if (navigator.share) {
+      navigator.share({ title: item.judul, text: teksBagikan, url }).catch(() => {});
+      return;
+    }
+
+    // Fallback untuk desktop/browser tanpa Web Share API: tampilkan modal
+    // dengan tautan share resmi tiap platform, plus opsi salin tautan.
+    document.getElementById('shareJudul').textContent = item.judul;
+    document.getElementById('shareWa').href = `https://wa.me/?text=${encodeURIComponent(teksBagikan + ' ' + url)}`;
+    document.getElementById('shareFb').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(teksBagikan)}&url=${encodeURIComponent(url)}`;
+
+    const btnCopy = document.getElementById('shareCopy');
+    btnCopy.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(url);
+        tampilkanToast('Tautan disalin ke clipboard');
+      } catch (e) {
+        tampilkanToast('Gagal menyalin tautan, salin manual dari bilah alamat.');
+      }
+    };
+
+    document.getElementById('overlayShare').classList.add('show');
   }
 
   document.getElementById('filterPeran').addEventListener('change', () => muatGaleri(true));
@@ -1067,8 +1260,32 @@
 
   async function bukaPanelAdmin() {
     document.getElementById('overlayAdminPanel').classList.add('show');
-    await muatDaftarMenunggu();
+    bukaTabAdmin('menunggu');
   }
+
+  function bukaTabAdmin(tab) {
+    const tabMenunggu = document.getElementById('tabMenunggu');
+    const tabRiwayat = document.getElementById('tabRiwayat');
+    const listMenunggu = document.getElementById('adminList');
+    const listRiwayat = document.getElementById('adminRiwayat');
+    const judul = document.getElementById('adminPanelTitle');
+    const desk = document.getElementById('adminPanelDesc');
+    if (tab === 'riwayat') {
+      tabRiwayat.classList.add('active'); tabMenunggu.classList.remove('active');
+      listMenunggu.style.display = 'none'; listRiwayat.style.display = 'block';
+      judul.textContent = 'Riwayat Karya Disetujui';
+      desk.textContent = 'Telusuri, sunting, atau hapus karya yang sudah tayang di galeri publik.';
+      muatRiwayatDisetujui(0);
+    } else {
+      tabMenunggu.classList.add('active'); tabRiwayat.classList.remove('active');
+      listRiwayat.style.display = 'none'; listMenunggu.style.display = 'block';
+      judul.textContent = 'Karya Menunggu Peninjauan';
+      desk.textContent = 'Setujui, tolak, atau hapus pengajuan yang masuk.';
+      muatDaftarMenunggu();
+    }
+  }
+  document.getElementById('tabMenunggu').addEventListener('click', () => bukaTabAdmin('menunggu'));
+  document.getElementById('tabRiwayat').addEventListener('click', () => bukaTabAdmin('riwayat'));
 
   async function muatDaftarMenunggu() {
     const wrap = document.getElementById('adminList');
@@ -1130,6 +1347,176 @@
       });
     });
   }
+
+  // ---------------- Riwayat karya disetujui ----------------
+  const RIWAYAT_HALAMAN = 6;
+  let riwayatOffset = 0;
+  let riwayatCache = {};
+
+  async function muatRiwayatDisetujui(offset) {
+    riwayatOffset = offset;
+    const wrap = document.getElementById('riwayatList');
+    wrap.innerHTML = '<div class="empty-state">Memuat riwayat…</div>';
+    // Memakai endpoint publik yang sama dengan galeri (daftarKaryaPublik),
+    // karena data karya yang sudah "Disetujui" memang identik dengan yang
+    // tayang di galeri — tidak perlu endpoint terpisah untuk menampilkannya.
+    const resp = await apiGet('daftarKaryaPublik', { kategori: '', peran: '', cari: '', offset, limit: RIWAYAT_HALAMAN });
+    if (!resp.ok) {
+      wrap.innerHTML = `<div class="empty-state">Gagal memuat: ${escapeHtml(resp.error)}</div>`;
+      document.getElementById('riwayatHalamanInfo').textContent = '';
+      document.getElementById('btnRiwayatSebelumnya').disabled = true;
+      document.getElementById('btnRiwayatSelanjutnya').disabled = true;
+      return;
+    }
+
+    if (resp.data.length === 0) {
+      wrap.innerHTML = offset === 0
+        ? '<div class="empty-state">Belum ada karya yang disetujui.</div>'
+        : '<div class="empty-state">Tidak ada data lagi pada halaman ini.</div>';
+      document.getElementById('riwayatHalamanInfo').textContent = 'Tidak ada data';
+    } else {
+      wrap.innerHTML = '';
+      resp.data.forEach(item => {
+        riwayatCache[item.id] = item;
+        const el = document.createElement('div');
+        el.className = 'history-item';
+        el.innerHTML = `
+          <div class="history-thumb">
+            ${item.fotoBuktiPreview
+              ? `<img src="${escapeHtml(urlThumbUkuran(item.fotoBuktiPreview, 150))}" data-drive-id="${escapeHtml(ekstrakDriveId(item.fotoBuktiPreview) || '')}" data-lebar="150" alt="${escapeHtml(item.judul)}" loading="lazy" decoding="async" onerror="tanganiErrorThumb(this)">`
+              : `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><circle cx="9" cy="9" r="2"></circle><path d="M21 15l-5-5L5 21"></path></svg>`}
+          </div>
+          <div class="history-body">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:4px;">
+              <span class="kategori-badge">${escapeHtml(item.kategori)}</span>
+              <span class="peran-badge">${escapeHtml(item.peran)}</span>
+            </div>
+            <h4>${escapeHtml(item.judul)}</h4>
+            <div class="history-meta">${escapeHtml(item.nama)}${item.tanggalPencapaian ? ' · 🗓️ ' + escapeHtml(item.tanggalPencapaian) : ''}</div>
+            <div class="history-actions">
+              <button class="edit" data-id="${item.id}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"></path></svg>Edit</button>
+              <button class="delete" data-id="${item.id}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path></svg>Hapus</button>
+            </div>
+          </div>
+        `;
+        wrap.appendChild(el);
+      });
+
+      wrap.querySelectorAll('.edit').forEach(btn => {
+        btn.addEventListener('click', () => bukaEditKarya(riwayatCache[btn.dataset.id]));
+      });
+      wrap.querySelectorAll('.delete').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('Hapus karya ini secara permanen dari galeri?')) return;
+          await apiPost({ aksi: 'hapusKarya', passwordAdmin: adminPassword, id: btn.dataset.id });
+          muatRiwayatDisetujui(riwayatOffset);
+          muatGaleri();
+          muatStatistik();
+        });
+      });
+
+      document.getElementById('riwayatHalamanInfo').textContent = `Menampilkan ${offset + 1}–${offset + resp.data.length}`;
+    }
+
+    document.getElementById('btnRiwayatSebelumnya').disabled = offset === 0;
+    document.getElementById('btnRiwayatSelanjutnya').disabled = !resp.hasMore;
+  }
+
+  document.getElementById('btnRiwayatSebelumnya').addEventListener('click', () => {
+    muatRiwayatDisetujui(Math.max(0, riwayatOffset - RIWAYAT_HALAMAN));
+  });
+  document.getElementById('btnRiwayatSelanjutnya').addEventListener('click', () => {
+    muatRiwayatDisetujui(riwayatOffset + RIWAYAT_HALAMAN);
+  });
+
+  // ---------------- Edit karya (dari tab Riwayat) ----------------
+  const KATEGORI_BAKU = ['Prestasi Lomba', 'Publikasi/Karya Tulis', 'Karya Seni', 'Sertifikasi', 'Penelitian'];
+
+  function bukaEditKarya(item) {
+    if (!item) return;
+    const msg = document.getElementById('editMsg');
+    msg.className = 'form-msg'; msg.textContent = '';
+
+    document.getElementById('eNama').value = item.nama || '';
+    document.getElementById('ePeran').value = item.peran || '';
+    document.getElementById('eKeteranganPeran').value = item.keteranganPeran || '';
+
+    const eKategori = document.getElementById('eKategori');
+    const eWrapLainnya = document.getElementById('eWrapKategoriLainnya');
+    const eKategoriLainnya = document.getElementById('eKategoriLainnya');
+    if (item.kategori && !KATEGORI_BAKU.includes(item.kategori)) {
+      eKategori.value = 'Lainnya';
+      eWrapLainnya.style.display = 'block';
+      eKategoriLainnya.value = item.kategori;
+    } else {
+      eKategori.value = item.kategori || '';
+      eWrapLainnya.style.display = 'none';
+      eKategoriLainnya.value = '';
+    }
+
+    document.getElementById('eJudul').value = item.judul || '';
+    document.getElementById('eDeskripsi').value = item.deskripsi || '';
+    document.getElementById('eTanggal').value = item.tanggalPencapaian || '';
+    document.getElementById('eTautan').value = item.tautan || '';
+    document.getElementById('eFoto').value = '';
+    document.getElementById('overlayEditKarya').dataset.editId = item.id;
+    document.getElementById('overlayEditKarya').classList.add('show');
+  }
+
+  document.getElementById('eKategori').addEventListener('change', (e) => {
+    document.getElementById('eWrapKategoriLainnya').style.display = e.target.value === 'Lainnya' ? 'block' : 'none';
+  });
+
+  document.getElementById('btnSimpanEdit').addEventListener('click', async () => {
+    const btn = document.getElementById('btnSimpanEdit');
+    const msg = document.getElementById('editMsg');
+    const id = document.getElementById('overlayEditKarya').dataset.editId;
+    const eKategori = document.getElementById('eKategori').value;
+    const eKategoriLainnya = document.getElementById('eKategoriLainnya').value.trim();
+
+    if (!document.getElementById('eNama').value.trim() || !document.getElementById('ePeran').value ||
+        !eKategori || !document.getElementById('eJudul').value.trim() || !document.getElementById('eDeskripsi').value.trim()) {
+      msg.className = 'form-msg err'; msg.textContent = 'Lengkapi seluruh isian bertanda *.'; return;
+    }
+    if (eKategori === 'Lainnya' && !eKategoriLainnya) {
+      msg.className = 'form-msg err'; msg.textContent = 'Sebutkan kategori lainnya.'; return;
+    }
+
+    btn.disabled = true; btn.textContent = 'Menyimpan…';
+    try {
+      const payload = {
+        aksi: 'editKarya',
+        passwordAdmin: adminPassword,
+        id,
+        nama: document.getElementById('eNama').value.trim(),
+        peran: document.getElementById('ePeran').value,
+        keteranganPeran: document.getElementById('eKeteranganPeran').value.trim(),
+        kategori: eKategori,
+        kategoriLainnya: eKategoriLainnya,
+        judul: document.getElementById('eJudul').value.trim(),
+        deskripsi: document.getElementById('eDeskripsi').value.trim(),
+        tanggalPencapaian: document.getElementById('eTanggal').value,
+        tautan: document.getElementById('eTautan').value.trim()
+      };
+      const fotoFile = document.getElementById('eFoto').files[0];
+      if (fotoFile) payload.foto = await fileKeBase64(fotoFile);
+
+      const resp = await apiPost(payload);
+      if (resp.ok) {
+        msg.className = 'form-msg ok'; msg.textContent = resp.message || 'Perubahan tersimpan.';
+        muatRiwayatDisetujui(riwayatOffset);
+        muatGaleri();
+        setTimeout(() => document.getElementById('overlayEditKarya').classList.remove('show'), 900);
+      } else {
+        msg.className = 'form-msg err'; msg.textContent = resp.error;
+      }
+    } catch (err) {
+      msg.className = 'form-msg err';
+      msg.textContent = err && err.message ? err.message : 'Terjadi kesalahan jaringan. Coba lagi.';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Simpan Perubahan';
+    }
+  });
 
   document.querySelectorAll('[data-close]').forEach(btn => {
     btn.addEventListener('click', () => btn.closest('.overlay').classList.remove('show'));
