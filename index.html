@@ -454,7 +454,7 @@
       <div class="meta">${escapeHtml(item.kategori)} · ${escapeHtml(item.peran)}${item.keteranganPeran ? ' · ' + escapeHtml(item.keteranganPeran) : ''}</div>
       <h2>${escapeHtml(item.judul)}</h2>
       <div class="nama">${escapeHtml(item.nama)}${item.tanggalPencapaian ? ' · ' + escapeHtml(item.tanggalPencapaian) : ''}</div>
-      ${item.fotoBukti ? `<img src="${escapeHtml(item.fotoBukti)}" alt="Bukti karya">` : ''}
+      ${item.fotoBukti ? `<img src="${escapeHtml(item.fotoBuktiPreview || item.fotoBukti)}" alt="Bukti karya" onerror="this.replaceWith(Object.assign(document.createElement('a'),{href:'${escapeHtml(item.fotoBukti)}',target:'_blank',rel:'noopener',textContent:'Berkas tidak bisa ditampilkan langsung — buka di tab baru →'}))">` : ''}
       <p>${escapeHtml(item.deskripsi)}</p>
       ${item.tautan ? `<p><a href="${escapeHtml(item.tautan)}" target="_blank" rel="noopener">Lihat tautan pendukung →</a></p>` : ''}
     `;
