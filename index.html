@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0b3d91">
+<meta name="theme-color" content="#1d56b3">
 <title>KaryaKu — Jejak Digital Karya SMK Ciledug Al-Musaddadiyah</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0b3d91;
-    --navy-dark:#082a68;
-    --navy-darker:#061c47;
+    --navy:#1d56b3;
+    --navy-dark:#14418f;
+    --navy-darker:#0f3170;
     --gold:#f5a623;
     --gold-dark:#d98a0c;
     --bg:#ffffff;
@@ -149,30 +149,32 @@
       <span>KaryaKu<small>SMK CALM · Garut</small></span>
     </a>
     <div class="nav-links">
-      <a href="#galeri">Jelajah Karya</a>
+      <a href="#galeri">Telusuri Karya</a>
       <a href="#statistik">Pencapaian</a>
       <a href="#" id="btnBukaAdmin">Admin</a>
-      <a href="#upload" class="btn-pill gold">✨ Bagikan Karya</a>
+      <a href="#upload" class="btn-pill gold">Ajukan Karya</a>
     </div>
   </div>
 </nav>
 
 <div class="hero">
   <div class="wrap">
-    <span class="eyebrow">✨ Jejak Digital Karya SMK CALM</span>
-    <h1>Karya yang membanggakan, <em>terekam dan terverifikasi</em>.</h1>
-    <p class="lead">KaryaKu adalah ruang bagi guru, staf, siswa, dan alumni SMKS Ciledug Al-Musaddadiyah untuk mendokumentasikan
-       pencapaian — prestasi lomba, karya tulis, karya seni, sertifikasi, hingga hasil penelitian. Setiap karya ditinjau
-       admin sekolah paling lambat <strong>1x24 jam</strong> sebelum tampil di galeri publik.</p>
+    <span class="eyebrow">Arsip Digital Karya &amp; Prestasi Akademik</span>
+    <h1>Mendokumentasikan Pencapaian, <em>Merawat Warisan Intelektual</em></h1>
+    <p class="lead">KaryaKu merupakan wahana digital bagi guru, tenaga kependidikan, peserta didik, dan alumni
+       SMKS Ciledug Al-Musaddadiyah untuk mendokumentasikan capaian akademik maupun non-akademik — meliputi
+       prestasi kompetisi, karya tulis ilmiah, karya seni, sertifikasi kompetensi, hingga hasil penelitian. Setiap
+       pengajuan akan ditelaah oleh admin sekolah dalam waktu paling lambat <strong>1×24 jam</strong> sebelum
+       dipublikasikan pada galeri.</p>
     <div class="hero-ctas">
-      <a href="#upload" class="btn-pill solid">🎓 Bagikan Karyamu</a>
-      <a href="#galeri" class="btn-pill outline">📚 Jelajahi Galeri</a>
+      <a href="#upload" class="btn-pill solid">Ajukan Karya Anda</a>
+      <a href="#galeri" class="btn-pill outline">Telusuri Galeri Karya</a>
     </div>
     <div class="chip-row">
-      <div class="chip"><span class="chip-icon">📚</span><span><span class="chip-label">Total Karya</span><span class="chip-value" id="chipTotalKarya">—</span></span></div>
-      <div class="chip"><span class="chip-icon">🏷️</span><span><span class="chip-label">Kategori</span><span class="chip-value">6 Kategori</span></span></div>
-      <div class="chip"><span class="chip-icon">⏱️</span><span><span class="chip-label">SLA Peninjauan</span><span class="chip-value">Maks 1x24 Jam</span></span></div>
-      <div class="chip"><span class="chip-icon">🎓</span><span><span class="chip-label">Untuk Siapa</span><span class="chip-value">Guru · Staf · Siswa · Alumni</span></span></div>
+      <div class="chip"><span class="chip-icon">📚</span><span><span class="chip-label">Karya Terpublikasi</span><span class="chip-value" id="chipTotalKarya">—</span></span></div>
+      <div class="chip"><span class="chip-icon">🏷️</span><span><span class="chip-label">Ragam Kategori</span><span class="chip-value">6 Kategori</span></span></div>
+      <div class="chip"><span class="chip-icon">⏱️</span><span><span class="chip-label">Masa Tinjau</span><span class="chip-value">Maksimal 1×24 Jam</span></span></div>
+      <div class="chip"><span class="chip-icon">🎓</span><span><span class="chip-label">Kalangan Kontributor</span><span class="chip-value">Guru · Staf · Siswa · Alumni</span></span></div>
     </div>
   </div>
 </div>
@@ -180,14 +182,15 @@
 <section id="galeri">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">📚 Galeri Karya</span>
-      <h2>Pencapaian yang <em>membanggakan</em></h2>
-      <p>Jelajahi rekam jejak karya seluruh keluarga besar SMK CALM — dari prestasi lomba hingga hasil penelitian.</p>
+      <span class="eyebrow">Galeri Karya</span>
+      <h2>Rekam Jejak yang <em>Terhormat</em></h2>
+      <p>Telusuri koleksi karya segenap civitas akademika SMK Ciledug Al-Musaddadiyah — dari prestasi kompetisi
+      hingga hasil penelitian yang telah ditelaah dan disahkan.</p>
     </div>
     <div class="filters">
       <select id="filterPeran"><option value="">Semua Peran</option></select>
       <select id="filterKategori"><option value="">Semua Kategori</option></select>
-      <input type="text" id="filterCari" placeholder="Cari judul, nama, atau kata kunci...">
+      <input type="text" id="filterCari" placeholder="Telusuri berdasarkan judul, nama, atau kata kunci...">
     </div>
     <div class="grid" id="grid"></div>
   </div>
@@ -196,15 +199,16 @@
 <section id="statistik" class="alt">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">🏆 Pencapaian</span>
-      <h2>KaryaKu dalam <em>angka</em></h2>
-      <p>Rekam jejak yang terus bertambah dari seluruh guru, staf, siswa, dan alumni SMK CALM.</p>
+      <span class="eyebrow">Pencapaian Institusi</span>
+      <h2>KaryaKu dalam <em>Angka</em></h2>
+      <p>Cerminan kontribusi yang terus bertumbuh dari segenap guru, tenaga kependidikan, peserta didik, dan
+      alumni SMK Ciledug Al-Musaddadiyah.</p>
     </div>
     <div class="stat-grid" id="statGrid">
-      <div class="stat-card"><div class="stat-icon">📚</div><div class="stat-num" id="statTotal">—</div><div class="stat-label">Total Karya Tayang</div></div>
-      <div class="stat-card"><div class="stat-icon">🎓</div><div class="stat-num" id="statSiswa">—</div><div class="stat-label">Karya dari Siswa</div></div>
-      <div class="stat-card"><div class="stat-icon">🧑‍🏫</div><div class="stat-num" id="statGuru">—</div><div class="stat-label">Karya dari Guru</div></div>
-      <div class="stat-card"><div class="stat-icon">🌟</div><div class="stat-num" id="statAlumni">—</div><div class="stat-label">Karya dari Alumni</div></div>
+      <div class="stat-card"><div class="stat-icon">📚</div><div class="stat-num" id="statTotal">—</div><div class="stat-label">Karya Terpublikasi</div></div>
+      <div class="stat-card"><div class="stat-icon">🎓</div><div class="stat-num" id="statSiswa">—</div><div class="stat-label">Kontribusi Peserta Didik</div></div>
+      <div class="stat-card"><div class="stat-icon">🧑‍🏫</div><div class="stat-num" id="statGuru">—</div><div class="stat-label">Kontribusi Tenaga Pendidik</div></div>
+      <div class="stat-card"><div class="stat-icon">🌟</div><div class="stat-num" id="statAlumni">—</div><div class="stat-label">Kontribusi Alumni</div></div>
     </div>
   </div>
 </section>
@@ -212,9 +216,10 @@
 <section id="upload">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">✨ Bagikan Karyamu</span>
-      <h2>Ceritakan <em>pencapaianmu</em></h2>
-      <p>Isi formulir di bawah — karyamu akan tayang di galeri publik setelah disetujui admin (maks. 1x24 jam).</p>
+      <span class="eyebrow">Pengajuan Karya</span>
+      <h2>Dokumentasikan <em>Capaian Anda</em></h2>
+      <p>Lengkapi formulir berikut dengan saksama. Karya Anda akan dipublikasikan pada galeri setelah melalui
+      proses tinjauan admin, paling lambat dalam waktu 1×24 jam.</p>
     </div>
     <div class="panel">
       <form id="formKarya">
@@ -233,8 +238,8 @@
         </div>
 
         <div class="field">
-          <label>Keterangan Peran</label>
-          <input type="text" id="fKeteranganPeran" placeholder="mis. Kelas XII TKJ 1 / Alumni angkatan 2021 / Guru Produktif RPL">
+          <label>Keterangan Kedudukan</label>
+          <input type="text" id="fKeteranganPeran" placeholder="mis. Kelas XII TKJ 1 / Alumni Angkatan 2021 / Guru Produktif RPL">
         </div>
 
         <div class="row2">
@@ -263,7 +268,7 @@
 
         <div class="field">
           <label>Deskripsi *</label>
-          <textarea id="fDeskripsi" required placeholder="Ceritakan proses, konteks, dan hasil pencapaian ini."></textarea>
+          <textarea id="fDeskripsi" required placeholder="Uraikan konteks, proses, dan hasil dari capaian ini secara ringkas dan jelas."></textarea>
         </div>
 
         <div class="row2">
@@ -273,18 +278,18 @@
           </div>
           <div class="field">
             <label>Tautan Pendukung (opsional)</label>
-            <input type="url" id="fTautan" placeholder="Link video/artikel/portofolio">
+            <input type="url" id="fTautan" placeholder="Tautan video, artikel, atau portofolio pendukung">
           </div>
         </div>
 
         <div class="field">
           <label>Bukti Karya (foto/sertifikat/dokumen) *</label>
           <input type="file" id="fFoto" accept="image/*,application/pdf" required>
-          <div class="hint">Wajib diunggah sebagai bukti — foto (JPG/PNG) atau dokumen PDF, maks. sekitar 5 MB.</div>
+          <div class="hint">Unggahan bersifat wajib sebagai bukti autentik — foto (JPG/PNG) atau dokumen PDF, dengan ukuran maksimal ±5 MB.</div>
           <img id="previewFoto">
         </div>
 
-        <button type="submit" class="submit-btn" id="btnSubmit">🚀 Kirim untuk Ditinjau</button>
+        <button type="submit" class="submit-btn" id="btnSubmit">Ajukan untuk Ditinjau</button>
         <div class="form-msg" id="formMsg"></div>
       </form>
     </div>
@@ -296,8 +301,9 @@
     <div class="footer-grid">
       <div>
         <div class="footer-brand">🏫 KaryaKu — SMK CALM</div>
-        <p>Jejak digital karya guru, staf, siswa, dan alumni SMKS Ciledug Al-Musaddadiyah Garut. Bagian dari ekosistem
-           digital sekolah sejak 1996, di bawah naungan Yayasan Al-Musaddadiyah Garut.</p>
+        <p>Sebuah arsip digital yang mendokumentasikan karya dan capaian guru, tenaga kependidikan, peserta didik,
+           serta alumni SMKS Ciledug Al-Musaddadiyah Garut — bagian dari ekosistem digital sekolah sejak 1996,
+           di bawah naungan Yayasan Al-Musaddadiyah Garut.</p>
         <p>📍 Jl. Mayor Syamsu No.2, Jayaraga, Tarogong Kidul, Garut<br>📞 (0262) 4892181</p>
       </div>
       <div>
@@ -318,7 +324,7 @@
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">© <span id="tahunFooter"></span> SMK Ciledug Al-Musaddadiyah · KaryaKu — Karya tampil publik setelah disetujui admin (maks. 1x24 jam)</div>
+    <div class="footer-bottom">© <span id="tahunFooter"></span> SMK Ciledug Al-Musaddadiyah · KaryaKu — Karya dipublikasikan setelah melalui tinjauan admin (maksimal 1×24 jam)</div>
   </div>
 </footer>
 
@@ -334,7 +340,7 @@
 <div class="overlay" id="overlayAdminLogin">
   <div class="modal">
     <button class="modal-close" data-close>&times;</button>
-    <h3>Masuk sebagai Admin</h3>
+    <h3>Autentikasi Admin</h3>
     <div class="field"><label>Password Admin</label><input type="password" id="adminPasswordInput"></div>
     <button class="submit-btn" id="btnAdminLogin">Masuk</button>
     <div class="form-msg" id="adminLoginMsg"></div>
@@ -354,8 +360,8 @@
   // ============================================================
   // GANTI DUA NILAI INI setelah men-deploy Web App Apps Script
   // ============================================================
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwFP1DlRm1NHEWj0vG1DG-gQo6cnXQpjtMcXpglL_gqHZEF67J7hMnAMAKJK_3_Viocfg/exec';
-  const TOKEN = 'SMKS_CALM1996'; // harus sama dengan SECRET_TOKEN di Code.gs
+  const APPS_SCRIPT_URL = 'GANTI_DENGAN_URL_WEB_APP_APPS_SCRIPT_ANDA';
+  const TOKEN = 'GANTI_TOKEN_RAHASIA_KARYAKU'; // harus sama dengan SECRET_TOKEN di Code.gs
 
   const KATEGORI_LIST = ['Prestasi Lomba', 'Publikasi/Karya Tulis', 'Karya Seni', 'Sertifikasi', 'Penelitian', 'Lainnya'];
   const PERAN_LIST = ['Guru', 'Staf', 'Siswa', 'Alumni'];
@@ -402,7 +408,7 @@
 
     const resp = await apiGet('daftarKaryaPublik', { kategori, peran, cari });
     if (!resp.ok) { grid.innerHTML = `<div class="empty-state">Gagal memuat: ${escapeHtml(resp.error)}</div>`; return; }
-    if (resp.data.length === 0) { grid.innerHTML = '<div class="empty-state">Belum ada karya pada filter ini. Jadilah yang pertama membagikan karyamu! 🎓</div>'; return; }
+    if (resp.data.length === 0) { grid.innerHTML = '<div class="empty-state">Belum terdapat karya pada kriteria ini. Jadilah kontributor pertama yang mengabadikan karyanya di sini.</div>'; return; }
 
     grid.innerHTML = '';
     resp.data.forEach(item => {
@@ -507,7 +513,7 @@
       };
       const resp = await apiPost(payload);
       if (resp.ok) {
-        msg.className = 'form-msg ok'; msg.textContent = '✅ ' + resp.message;
+        msg.className = 'form-msg ok'; msg.textContent = resp.message;
         document.getElementById('formKarya').reset();
         document.getElementById('previewFoto').style.display = 'none';
         document.getElementById('wrapKategoriLainnya').style.display = 'none';
@@ -517,7 +523,7 @@
     } catch (err) {
       msg.className = 'form-msg err'; msg.textContent = 'Terjadi kesalahan jaringan. Coba lagi.';
     } finally {
-      btn.disabled = false; btn.textContent = '🚀 Kirim untuk Ditinjau';
+      btn.disabled = false; btn.textContent = 'Ajukan untuk Ditinjau';
     }
   });
 
@@ -552,7 +558,7 @@
     wrap.innerHTML = 'Memuat…';
     const resp = await apiPost({ aksi: 'daftarMenunggu', passwordAdmin: adminPassword });
     if (!resp.ok) { wrap.innerHTML = `Gagal memuat: ${escapeHtml(resp.error)}`; return; }
-    if (resp.data.length === 0) { wrap.innerHTML = '<div class="empty-state">Tidak ada karya yang menunggu peninjauan. 🎉</div>'; return; }
+    if (resp.data.length === 0) { wrap.innerHTML = '<div class="empty-state">Tidak terdapat karya yang menunggu peninjauan saat ini.</div>'; return; }
 
     wrap.innerHTML = '';
     resp.data.forEach(item => {
@@ -565,9 +571,9 @@
         <p style="font-size:13px;color:var(--text-soft);">${escapeHtml(item.deskripsi)}</p>
         ${item.fotoBukti ? `<a href="${escapeHtml(item.fotoBukti)}" target="_blank" rel="noopener">Lihat bukti karya →</a>` : ''}
         <div class="admin-actions">
-          <button class="approve" data-id="${item.id}" data-aksi="Disetujui">✅ Setujui</button>
-          <button class="reject" data-id="${item.id}" data-aksi="Ditolak">✖ Tolak</button>
-          <button class="delete" data-id="${item.id}" data-aksi="hapus">🗑 Hapus</button>
+          <button class="approve" data-id="${item.id}" data-aksi="Disetujui">Setujui</button>
+          <button class="reject" data-id="${item.id}" data-aksi="Ditolak">Tolak</button>
+          <button class="delete" data-id="${item.id}" data-aksi="hapus">Hapus</button>
         </div>
       `;
       wrap.appendChild(el);
