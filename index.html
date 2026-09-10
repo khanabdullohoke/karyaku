@@ -1203,30 +1203,43 @@
     const teksBagikan = `${item.judul} — karya ${item.nama} di Galeri KaryaKu, SMK Ciledug Al-Musaddadiyah.`;
     const url = urlHalamanIni();
 
-    // FIX KRITIS — TOMBOL BAGIKAN TIDAK BERFUNGSI: sebelumnya navigator.share()
-    // dipanggil langsung lalu di-chain dengan .catch(), padahal .catch() hanya
-    // menangani PENOLAKAN PROMISE. Saat halaman ini ditanam di dalam <iframe>
-    // (mis. disematkan di halaman utama situs sekolah), banyak browser
-    // memblokir Web Share API lewat Permissions-Policy dan melempar exception
-    // SECARA SINKRON begitu navigator.share() dipanggil — sebelum Promise-nya
-    // sempat terbentuk. Exception sinkron itu tidak pernah sampai ke .catch(),
-    // sehingga seluruh fungsi berhenti di baris ini dan modal fallback
-    // (WA/Facebook/X/salin tautan) di bawah tidak pernah tampil — inilah
-    // sebabnya tombol "Bagikan" terlihat tidak merespons sama sekali saat
-    // diklik. Sekarang dibungkus try/catch: kalau navigator.share() gagal
-    // dengan cara apa pun, eksekusi tetap lanjut ke modal fallback di bawah.
+    // FIX KRITIS #2 — TOMBOL BAGIKAN MASIH TIDAK BERFUNGSI: perbaikan
+    // sebelumnya (try/catch) hanya menangani kasus navigator.share() gagal
+    // SECARA SINKRON. Ternyata ada kasus lebih umum: saat halaman ini
+    // ditanam di dalam <iframe> (mis. disematkan di situs utama sekolah),
+    // navigator.share TETAP ADA sebagai fungsi, tapi Promise yang
+    // dikembalikannya DITOLAK SECARA ASINKRON (NotAllowedError) karena
+    // kebijakan iframe/izin browser. Kode sebelumnya sudah keburu
+    // `return` SEBELUM penolakan itu terjadi, lalu `.catch(() => {})`
+    // cuma membisukan errornya tanpa melakukan apa-apa — modal fallback
+    // TIDAK PERNAH tampil. Klik jadi terlihat seperti tidak merespons sama
+    // sekali. Sekarang penolakan Promise memicu modal fallback juga
+    // (kecuali kalau penyebabnya AbortError — itu artinya pengguna sendiri
+    // yang membatalkan share-sheet, jadi memang seharusnya tidak ada apa-apa
+    // yang ditampilkan lagi).
     if (navigator.share) {
       try {
         const hasilShare = navigator.share({ title: item.judul, text: teksBagikan, url });
-        if (hasilShare && typeof hasilShare.catch === 'function') hasilShare.catch(() => {});
+        if (hasilShare && typeof hasilShare.catch === 'function') {
+          hasilShare.catch((errAsync) => {
+            if (errAsync && errAsync.name === 'AbortError') return;
+            tampilkanModalBagikan(item, teksBagikan, url);
+          });
+        }
         return;
       } catch (errShare) {
         // Sengaja tidak berhenti di sini — lanjut ke modal fallback di bawah.
       }
     }
 
-    // Fallback untuk desktop/browser tanpa Web Share API: tampilkan modal
-    // dengan tautan share resmi tiap platform, plus opsi salin tautan.
+    tampilkanModalBagikan(item, teksBagikan, url);
+  }
+
+  // Modal fallback (WA/Facebook/X/salin tautan) — dipisah jadi fungsi sendiri
+  // karena kini dipanggil dari DUA jalur: (1) navigator.share tidak tersedia
+  // sama sekali, atau (2) navigator.share tersedia tapi gagal (baik sinkron
+  // maupun asinkron).
+  function tampilkanModalBagikan(item, teksBagikan, url) {
     document.getElementById('shareJudul').textContent = item.judul;
     document.getElementById('shareWa').href = `https://wa.me/?text=${encodeURIComponent(teksBagikan + ' ' + url)}`;
     document.getElementById('shareFb').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
