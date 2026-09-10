@@ -13,27 +13,40 @@
     --navy:#1d56b3;
     --navy-dark:#14418f;
     --navy-darker:#0f3170;
+    --navy-ink:#0a2452;
     --gold:#f5a623;
     --gold-dark:#d98a0c;
+    --gold-soft:#fdf1dc;
     --bg:#ffffff;
-    --bg-alt:#f2f6fc;
+    --bg-alt:#f6f8fd;
+    --bg-warm:#fbfaf6;
     --text:#16233f;
     --text-soft:#5a6b8c;
     --line:#e3e9f5;
     --radius:14px;
     --radius-sm:8px;
+    --radius-lg:22px;
+    --shadow-soft:0 2px 10px rgba(11,61,145,.05);
+    --shadow-card:0 10px 28px rgba(11,61,145,.09);
   }
   *{box-sizing:border-box;}
   body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;}
-  h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;margin:0 0 .4em;color:var(--navy);}
+  h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;margin:0 0 .4em;color:var(--navy);letter-spacing:-.01em;}
   em{color:var(--gold-dark);font-style:italic;}
   a{color:var(--navy);}
   button{font-family:'Inter',sans-serif;cursor:pointer;}
   .wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
 
   /* Top bar linking back to main site */
-  .topbar{background:var(--navy-darker);color:#cfe0ff;font-size:12.5px;text-align:center;padding:6px 12px;}
-  .topbar a{color:#fff;text-decoration:underline;}
+  .topbar{background:var(--navy-ink);color:#a9c2ec;font-size:13px;padding:9px 12px;}
+  .topbar .wrap{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;text-align:center;}
+  .topbar .topbar-tag{display:inline-flex;align-items:center;gap:7px;color:#dbe7fa;font-weight:500;}
+  .topbar .topbar-tag svg{flex-shrink:0;}
+  .topbar .topbar-sep{opacity:.35;}
+  .topbar a.topbar-link{display:inline-flex;align-items:center;gap:5px;color:#fff;text-decoration:none;font-weight:600;padding:2px 4px;border-bottom:1px solid rgba(255,255,255,.35);transition:border-color .15s,opacity .15s;}
+  .topbar a.topbar-link:hover{border-color:#fff;opacity:.85;}
+  .topbar a.topbar-link svg{transition:transform .15s;}
+  .topbar a.topbar-link:hover svg{transform:translateX(-2px);}
 
   /* Nav */
   .site-nav{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 6px rgba(11,61,145,.05);}
@@ -42,8 +55,9 @@
   .brand .logo-badge{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;}
   .brand small{display:block;font-family:'Inter',sans-serif;font-weight:500;font-size:11px;color:var(--text-soft);}
   .nav-links{display:flex;align-items:center;gap:22px;font-size:14px;font-weight:500;}
-  .nav-links a{text-decoration:none;color:var(--text);}
+  .nav-links a{text-decoration:none;color:var(--text);white-space:nowrap;}
   .nav-links a:hover{color:var(--navy);}
+  @media (max-width:760px){.nav-links{gap:12px;}.nav-links a:not(.btn-pill):not(#btnBukaAdmin){display:none;}}
   .btn-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:10px 20px;font-size:13.5px;font-weight:600;text-decoration:none;border:none;}
   .btn-pill.solid{background:var(--navy);color:#fff;}
   .btn-pill.solid:hover{background:var(--navy-dark);}
@@ -52,20 +66,30 @@
   .btn-pill.outline{background:#fff;color:var(--navy);border:1.5px solid var(--navy);}
 
   /* Hero */
-  .hero{background:linear-gradient(180deg,#f2f6fc 0%,#ffffff 100%);padding:56px 0 40px;}
+  .hero{background:radial-gradient(ellipse 1100px 500px at 78% -10%,#e4edfb 0%,#ffffff 55%);padding:60px 0 0;overflow:hidden;}
+  .hero-inner{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center;padding-bottom:44px;}
+  @media (max-width:900px){.hero-inner{grid-template-columns:1fr;}.hero-art{order:-1;max-width:320px;margin:0 auto;}}
   .eyebrow{display:inline-flex;align-items:center;gap:6px;background:#eaf1ff;color:var(--navy);font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:999px;margin-bottom:16px;}
-  .hero h1{font-size:clamp(28px,4vw,40px);max-width:16ch;line-height:1.2;}
-  .hero p.lead{max-width:58ch;color:var(--text-soft);font-size:16px;}
-  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 30px;}
-  .chip-row{display:flex;gap:12px;flex-wrap:wrap;}
-  .chip{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;font-size:13px;min-width:150px;box-shadow:0 2px 10px rgba(11,61,145,.05);}
-  .chip .chip-icon{font-size:20px;}
+  .hero h1{font-size:clamp(28px,4vw,42px);max-width:15ch;line-height:1.18;}
+  .hero p.lead{max-width:52ch;color:var(--text-soft);font-size:16px;}
+  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 28px;}
+  .chip-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .chip{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:11px 15px;font-size:13px;min-width:140px;box-shadow:var(--shadow-soft);}
+  .chip .chip-icon{font-size:19px;}
   .chip .chip-label{color:var(--text-soft);display:block;font-size:11.5px;}
   .chip .chip-value{font-weight:700;color:var(--navy);font-family:'Poppins',sans-serif;}
+  .hero-art{position:relative;}
+  .hero-art svg{width:100%;height:auto;display:block;}
+  .hero-strip{border-top:1px solid var(--line);background:#fff;}
+  .hero-strip .wrap{display:flex;flex-wrap:wrap;gap:0;justify-content:space-between;padding:16px 24px;}
+  .hero-strip-item{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--text-soft);font-weight:500;padding:6px 14px;}
+  .hero-strip-item svg{flex-shrink:0;color:var(--gold-dark);}
 
-  section{padding:56px 0;}
+  section{padding:64px 0;}
   section.alt{background:var(--bg-alt);}
-  .section-head{max-width:640px;margin-bottom:28px;}
+  section.tight{padding:48px 0;}
+  .section-head{max-width:640px;margin-bottom:32px;}
+  .section-head.center{max-width:600px;margin-left:auto;margin-right:auto;text-align:center;}
   .section-head .eyebrow{margin-bottom:10px;}
   .section-head h2{font-size:clamp(22px,3vw,30px);}
   .section-head p{color:var(--text-soft);font-size:15px;margin:0;}
@@ -97,6 +121,55 @@
   .stat-card .stat-num{font-family:'Poppins',sans-serif;font-size:30px;font-weight:800;color:var(--navy);margin:8px 0 2px;}
   .stat-card .stat-label{font-size:13px;color:var(--text-soft);}
 
+  /* Cara kerja — steps */
+  .steps-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;counter-reset:step;}
+  @media (max-width:800px){.steps-row{grid-template-columns:1fr;}}
+  .step-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:26px 24px 24px;}
+  .step-card .step-num{font-family:'Poppins',sans-serif;font-weight:800;font-size:13px;color:var(--gold-dark);background:var(--gold-soft);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+  .step-card .step-icon{margin-bottom:14px;color:var(--navy);}
+  .step-card h3{font-size:16.5px;margin:0 0 6px;}
+  .step-card p{font-size:13.5px;color:var(--text-soft);margin:0;}
+  .steps-row .step-card:not(:last-child)::after{content:"";position:absolute;top:44px;right:-16px;width:20px;height:1px;background:var(--line);display:none;}
+  @media (min-width:801px){.steps-row .step-card:not(:last-child)::after{display:block;}}
+
+  /* Kategori showcase */
+  .kategori-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  @media (max-width:800px){.kategori-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.kategori-grid{grid-template-columns:1fr;}}
+  .kategori-item{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;text-decoration:none;color:var(--text);transition:border-color .15s,box-shadow .15s,transform .15s;}
+  .kategori-item:hover{border-color:var(--navy);box-shadow:var(--shadow-card);transform:translateY(-2px);}
+  .kategori-item .k-icon{flex-shrink:0;width:42px;height:42px;border-radius:12px;background:var(--bg-alt);display:flex;align-items:center;justify-content:center;color:var(--navy);}
+  .kategori-item h4{font-family:'Poppins',sans-serif;font-size:14.5px;font-weight:700;margin:0 0 3px;color:var(--text);}
+  .kategori-item p{font-size:12.5px;color:var(--text-soft);margin:0;line-height:1.5;}
+
+  /* Kenapa / fitur unggulan */
+  .fitur-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  @media (max-width:900px){.fitur-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.fitur-grid{grid-template-columns:1fr;}}
+  .fitur-item{padding:4px 2px;}
+  .fitur-item .f-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+  .fitur-item h4{font-size:15px;margin:0 0 6px;color:var(--text);font-family:'Poppins',sans-serif;}
+  .fitur-item p{font-size:13px;color:var(--text-soft);margin:0;}
+
+  /* FAQ accordion */
+  .faq-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px;}
+  .faq-item{border:1px solid var(--line);border-radius:var(--radius);background:#fff;overflow:hidden;}
+  .faq-item[open]{border-color:#c9d8f4;box-shadow:var(--shadow-soft);}
+  .faq-item summary{list-style:none;cursor:pointer;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:'Poppins',sans-serif;font-weight:600;font-size:15px;color:var(--text);}
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary .faq-plus{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--bg-alt);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;transition:transform .2s;}
+  .faq-item[open] summary .faq-plus{transform:rotate(45deg);background:var(--navy);color:#fff;}
+  .faq-item .faq-a{padding:0 22px 20px;color:var(--text-soft);font-size:14px;line-height:1.7;max-width:65ch;}
+
+  /* CTA banner */
+  .cta-banner{background:linear-gradient(120deg,var(--navy-ink) 0%,var(--navy) 100%);border-radius:var(--radius-lg);padding:44px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;position:relative;overflow:hidden;}
+  .cta-banner::before{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(245,166,35,.14);}
+  .cta-banner::after{content:"";position:absolute;left:30%;bottom:-70px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.05);}
+  .cta-banner-text{position:relative;z-index:1;max-width:52ch;}
+  .cta-banner-text h2{color:#fff;font-size:clamp(20px,2.6vw,26px);margin:0 0 8px;}
+  .cta-banner-text p{color:#c9d7f2;font-size:14.5px;margin:0;}
+  .cta-banner .btn-pill{position:relative;z-index:1;flex-shrink:0;}
+
   /* Upload panel */
   .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px;box-shadow:0 6px 20px rgba(11,61,145,.06);}
   .field{margin-bottom:18px;}
@@ -116,15 +189,22 @@
   #previewFoto{max-width:160px;max-height:160px;margin-top:10px;border-radius:var(--radius-sm);border:1px solid var(--line);display:none;}
 
   /* Footer matching school site */
-  footer{background:var(--navy-darker);color:#c9d7f2;padding:50px 0 0;margin-top:20px;font-size:14px;}
-  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px;padding-bottom:34px;border-bottom:1px solid rgba(255,255,255,.12);}
+  footer{background:var(--navy-ink);color:#c9d7f2;padding:56px 0 0;margin-top:24px;font-size:14px;}
+  .footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:32px;padding-bottom:34px;border-bottom:1px solid rgba(255,255,255,.12);}
   @media (max-width:800px){.footer-grid{grid-template-columns:1fr 1fr;}}
-  .footer-grid h4{color:#fff;font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 14px;}
+  .footer-grid h4{color:#fff;font-family:'Poppins',sans-serif;font-size:13.5px;margin:0 0 14px;}
   .footer-grid ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;}
   .footer-grid a{color:#c9d7f2;text-decoration:none;font-size:13.5px;}
   .footer-grid a:hover{color:#fff;}
-  .footer-brand{display:flex;align-items:center;gap:10px;font-family:'Poppins',sans-serif;font-weight:700;color:#fff;font-size:16px;margin-bottom:10px;}
-  .footer-bottom{text-align:center;padding:18px 0;font-size:12.5px;color:#93a7d1;}
+  .footer-brand{display:flex;align-items:center;gap:10px;font-family:'Poppins',sans-serif;font-weight:700;color:#fff;font-size:16px;margin-bottom:12px;}
+  .footer-brand .logo-badge{width:32px;height:32px;font-size:14px;}
+  .footer-contact{list-style:none;padding:0;margin:16px 0 0;display:flex;flex-direction:column;gap:8px;font-size:13px;color:#a9bde3;}
+  .footer-contact li{display:flex;align-items:flex-start;gap:8px;}
+  .footer-contact svg{flex-shrink:0;margin-top:2px;color:#7c96c9;}
+  .footer-social{display:flex;gap:10px;margin-top:16px;}
+  .footer-social a{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:#dbe7fa;transition:background .15s,border-color .15s;}
+  .footer-social a:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.35);}
+  .footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:20px 0;font-size:12.5px;color:#8199c7;}
 
   .overlay{position:fixed;inset:0;background:rgba(6,28,71,.62);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;z-index:50;}
   .overlay.show{display:flex;}
@@ -157,7 +237,19 @@
 </head>
 <body>
 
-<div class="topbar">🏫 Bagian dari website resmi SMKS Ciledug Al-Musaddadiyah — <a href="https://www.smkciledugalmusaddadiyah.sch.id/" target="_blank" rel="noopener">← Kembali ke Beranda</a></div>
+<div class="topbar">
+  <div class="wrap">
+    <span class="topbar-tag">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-6 8 6v12"></path><path d="M9 21v-6h6v6"></path></svg>
+      Bagian dari website resmi SMKS Ciledug Al-Musaddadiyah
+    </span>
+    <span class="topbar-sep">·</span>
+    <a class="topbar-link" href="https://www.smkciledugalmusaddadiyah.sch.id/" target="_blank" rel="noopener">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+      Kembali ke Beranda
+    </a>
+  </div>
+</div>
 
 <nav class="site-nav">
   <div class="site-nav-inner">
@@ -168,6 +260,7 @@
     <div class="nav-links">
       <a href="#galeri">Telusuri Karya</a>
       <a href="#statistik">Pencapaian</a>
+      <a href="#faq">FAQ</a>
       <a href="#" id="btnBukaAdmin">Admin</a>
       <a href="#upload" class="btn-pill gold">Ajukan Karya</a>
     </div>
@@ -175,26 +268,132 @@
 </nav>
 
 <div class="hero">
-  <div class="wrap">
-    <span class="eyebrow">Arsip Digital Karya &amp; Prestasi Akademik</span>
-    <h1>Mendokumentasikan Pencapaian, <em>Merawat Warisan Intelektual</em></h1>
-    <p class="lead">KaryaKu merupakan wahana digital bagi guru, tenaga kependidikan, peserta didik, dan alumni
-       SMKS Ciledug Al-Musaddadiyah untuk mendokumentasikan capaian akademik maupun non-akademik — meliputi
-       prestasi kompetisi, karya tulis ilmiah, karya seni, sertifikasi kompetensi, hingga hasil penelitian. Setiap
-       pengajuan akan ditelaah oleh admin sekolah dalam waktu paling lambat <strong>1×24 jam</strong> sebelum
-       dipublikasikan pada galeri.</p>
-    <div class="hero-ctas">
-      <a href="#upload" class="btn-pill solid">Ajukan Karya Anda</a>
-      <a href="#galeri" class="btn-pill outline">Telusuri Galeri Karya</a>
+  <div class="wrap hero-inner">
+    <div>
+      <span class="eyebrow">Arsip Digital Karya &amp; Prestasi Akademik</span>
+      <h1>Mendokumentasikan pencapaian, <em>merawat warisan intelektual</em></h1>
+      <p class="lead">KaryaKu adalah wahana digital bagi guru, tenaga kependidikan, peserta didik, dan alumni
+         SMKS Ciledug Al-Musaddadiyah untuk mendokumentasikan capaian akademik maupun non-akademik — mulai dari
+         prestasi kompetisi, karya tulis ilmiah, karya seni, sertifikasi kompetensi, hingga hasil penelitian.
+         Setiap pengajuan ditelaah admin sekolah paling lambat <strong>1×24 jam</strong> sebelum tayang di galeri.</p>
+      <div class="hero-ctas">
+        <a href="#upload" class="btn-pill solid">Ajukan Karya Anda</a>
+        <a href="#galeri" class="btn-pill outline">Telusuri Galeri Karya</a>
+      </div>
+      <div class="chip-row">
+        <div class="chip"><span class="chip-icon">📚</span><span><span class="chip-label">Karya Terpublikasi</span><span class="chip-value" id="chipTotalKarya">—</span></span></div>
+        <div class="chip"><span class="chip-icon">🏷️</span><span><span class="chip-label">Ragam Kategori</span><span class="chip-value">6 Kategori</span></span></div>
+        <div class="chip"><span class="chip-icon">⏱️</span><span><span class="chip-label">Masa Tinjau</span><span class="chip-value">Maks. 1×24 Jam</span></span></div>
+      </div>
     </div>
-    <div class="chip-row">
-      <div class="chip"><span class="chip-icon">📚</span><span><span class="chip-label">Karya Terpublikasi</span><span class="chip-value" id="chipTotalKarya">—</span></span></div>
-      <div class="chip"><span class="chip-icon">🏷️</span><span><span class="chip-label">Ragam Kategori</span><span class="chip-value">6 Kategori</span></span></div>
-      <div class="chip"><span class="chip-icon">⏱️</span><span><span class="chip-label">Masa Tinjau</span><span class="chip-value">Maksimal 1×24 Jam</span></span></div>
-      <div class="chip"><span class="chip-icon">🎓</span><span><span class="chip-label">Kalangan Kontributor</span><span class="chip-value">Guru · Staf · Siswa · Alumni</span></span></div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 380 380" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="190" cy="190" r="172" fill="#eaf1ff"/>
+        <circle cx="190" cy="190" r="172" fill="none" stroke="#d7e4fa" stroke-width="1.5" stroke-dasharray="3 7"/>
+        <g transform="translate(60,72)">
+          <rect x="0" y="26" width="150" height="196" rx="10" fill="#ffffff" stroke="#c9d8f4" stroke-width="2"/>
+          <rect x="16" y="0" width="150" height="196" rx="10" fill="#1d56b3"/>
+          <rect x="34" y="24" width="114" height="8" rx="4" fill="#fff" opacity=".9"/>
+          <rect x="34" y="42" width="80" height="6" rx="3" fill="#a9c4ef"/>
+          <circle cx="91" cy="100" r="34" fill="#f5a623"/>
+          <path d="M78 100l9 9 18-18" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <rect x="46" y="150" width="90" height="6" rx="3" fill="#a9c4ef"/>
+          <rect x="46" y="164" width="60" height="6" rx="3" fill="#a9c4ef"/>
+        </g>
+        <g transform="translate(224,44)">
+          <circle cx="34" cy="34" r="34" fill="#fff" stroke="#c9d8f4" stroke-width="2"/>
+          <path d="M20 36l9 9 19-19" stroke="#1e7d3c" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </g>
+        <g transform="translate(238,244)">
+          <rect x="0" y="0" width="92" height="70" rx="10" fill="#fff" stroke="#c9d8f4" stroke-width="2"/>
+          <circle cx="24" cy="35" r="14" fill="#fdf1dc" stroke="#f5a623" stroke-width="2"/>
+          <path d="M18 35l4 4 8-8" stroke="#d98a0c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <rect x="46" y="22" width="34" height="5" rx="2.5" fill="#dbe6fa"/>
+          <rect x="46" y="34" width="26" height="5" rx="2.5" fill="#dbe6fa"/>
+          <rect x="46" y="46" width="30" height="5" rx="2.5" fill="#dbe6fa"/>
+        </g>
+        <g transform="translate(48,268)">
+          <path d="M28 0c15 0 28 12 28 27S43 54 28 54 0 42 0 27 13 0 28 0z" fill="#fff" stroke="#c9d8f4" stroke-width="2"/>
+          <path d="M28 12l4.5 9.2 10.1 1.5-7.3 7.1 1.7 10-9-4.7-9 4.7 1.7-10-7.3-7.1 10.1-1.5z" fill="#f5a623"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="hero-strip">
+    <div class="wrap">
+      <span class="hero-strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"></path></svg>Ditinjau langsung oleh admin sekolah</span>
+      <span class="hero-strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg>Proses pengajuan hanya 5 menit</span>
+      <span class="hero-strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" opacity="0"></path><path d="M4 7h16M4 12h10M4 17h7"></path></svg>Terbuka untuk Guru, Staf, Siswa &amp; Alumni</span>
+      <span class="hero-strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>Data &amp; berkas bukti tersimpan aman</span>
     </div>
   </div>
 </div>
+
+<section id="cara-kerja" class="tight">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Alur Pengajuan</span>
+      <h2>Tiga langkah menuju <em>galeri</em></h2>
+      <p>Proses sederhana dan transparan, dari pengajuan hingga tayang di galeri publik.</p>
+    </div>
+    <div class="steps-row">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M4 20h16"></path></svg></div>
+        <h3>Lengkapi formulir</h3>
+        <p>Isi data diri, kategori, dan deskripsi karya, lalu unggah bukti berupa foto atau dokumen PDF.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg></div>
+        <h3>Ditelaah admin</h3>
+        <p>Tim admin sekolah memverifikasi kelengkapan dan keaslian data paling lambat dalam 1×24 jam.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.6 6.9L22 10l-5.6 4.8L18 22l-6-3.6L6 22l1.6-7.2L2 10l7.4-1.1z"></path></svg></div>
+        <h3>Tayang di galeri</h3>
+        <p>Karya yang disetujui langsung terbit di galeri publik lengkap dengan lencana terverifikasi.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="kategori" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Ragam Kategori</span>
+      <h2>Setiap bentuk capaian <em>punya tempatnya</em></h2>
+      <p>Enam kategori mencakup ragam kontribusi civitas akademika — pilih kategori yang paling sesuai saat mengajukan karya.</p>
+    </div>
+    <div class="kategori-grid">
+      <a href="#upload" class="kategori-item">
+        <span class="k-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.6 6.9L22 10l-5.6 4.8L18 22l-6-3.6L6 22l1.6-7.2L2 10l7.4-1.1z"></path></svg></span>
+        <span><h4>Prestasi Lomba</h4><p>Juara kompetisi akademik, olahraga, maupun keterampilan tingkat lokal hingga nasional.</p></span>
+      </a>
+      <a href="#upload" class="kategori-item">
+        <span class="k-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path></svg></span>
+        <span><h4>Publikasi/Karya Tulis</h4><p>Artikel, esai, buku, jurnal ilmiah, maupun karya tulis lain yang telah dipublikasikan.</p></span>
+      </a>
+      <a href="#upload" class="kategori-item">
+        <span class="k-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.6 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.6 1.6-1.6H16c3.3 0 6-2.7 6-6 0-4.5-4.5-8.7-10-8.7z"></path></svg></span>
+        <span><h4>Karya Seni</h4><p>Seni rupa, desain, musik, film pendek, dan karya kreatif lain hasil olah rasa dan gagasan.</p></span>
+      </a>
+      <a href="#upload" class="kategori-item">
+        <span class="k-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a4 4 0 004-4V5a4 4 0 00-8 0v6a4 4 0 004 4z"></path><path d="M19 11a7 7 0 01-14 0"></path><path d="M12 18v4"></path></svg></span>
+        <span><h4>Sertifikasi</h4><p>Sertifikat kompetensi, pelatihan, maupun uji kompetensi keahlian yang telah ditempuh.</p></span>
+      </a>
+      <a href="#upload" class="kategori-item">
+        <span class="k-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg></span>
+        <span><h4>Penelitian</h4><p>Riset, karya ilmiah remaja, maupun proyek penelitian terapan yang telah diselesaikan.</p></span>
+      </a>
+      <a href="#upload" class="kategori-item">
+        <span class="k-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 3"></path></svg></span>
+        <span><h4>Lainnya</h4><p>Bentuk capaian membanggakan lain yang belum tercakup pada kategori di atas.</p></span>
+      </a>
+    </div>
+  </div>
+</section>
 
 <section id="galeri">
   <div class="wrap">
@@ -229,6 +428,38 @@
       <div class="stat-card"><div class="stat-icon">🎓</div><div class="stat-num" id="statSiswa">—</div><div class="stat-label">Kontribusi Peserta Didik</div></div>
       <div class="stat-card"><div class="stat-icon">🧑‍🏫</div><div class="stat-num" id="statGuru">—</div><div class="stat-label">Kontribusi Tenaga Pendidik</div></div>
       <div class="stat-card"><div class="stat-icon">🌟</div><div class="stat-num" id="statAlumni">—</div><div class="stat-label">Kontribusi Alumni</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="kenapa" class="tight">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Kenapa KaryaKu</span>
+      <h2>Dibangun untuk <em>kepercayaan &amp; kemudahan</em></h2>
+      <p>Beberapa hal yang menjadikan KaryaKu layak menjadi arsip resmi capaian civitas akademika.</p>
+    </div>
+    <div class="fitur-grid">
+      <div class="fitur-item">
+        <div class="f-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"></path><path d="M9 12l2 2 4-4"></path></svg></div>
+        <h4>Terverifikasi Admin</h4>
+        <p>Setiap karya ditelaah manual sebelum tayang, sehingga isi galeri terjaga keasliannya.</p>
+      </div>
+      <div class="fitur-item">
+        <div class="f-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg></div>
+        <h4>Tinjauan Cepat</h4>
+        <p>Batas waktu peninjauan maksimal 1×24 jam, dengan pengingat otomatis bagi admin.</p>
+      </div>
+      <div class="fitur-item">
+        <div class="f-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg></div>
+        <h4>Data Tersimpan Aman</h4>
+        <p>Berkas bukti karya tersimpan pada penyimpanan resmi sekolah, bukan pihak ketiga.</p>
+      </div>
+      <div class="fitur-item">
+        <div class="f-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 00-3-3.87"></path><path d="M16 3.13a4 4 0 010 7.75"></path></svg></div>
+        <h4>Untuk Semua Kalangan</h4>
+        <p>Terbuka bagi guru, tenaga kependidikan, peserta didik, dan alumni tanpa terkecuali.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -316,15 +547,70 @@
   </div>
 </section>
 
+<section id="faq" class="alt">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Pertanyaan Umum</span>
+      <h2>Sebelum Anda <em>mengajukan karya</em></h2>
+      <p>Beberapa hal yang paling sering ditanyakan calon kontributor KaryaKu.</p>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Siapa saja yang boleh mengajukan karya? <span class="faq-plus">+</span></summary>
+        <div class="faq-a">Seluruh guru, tenaga kependidikan (staf), peserta didik aktif, dan alumni SMKS Ciledug Al-Musaddadiyah dapat mengajukan karya tanpa terkecuali. Cukup pilih peran yang sesuai pada formulir pengajuan.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Berapa lama proses peninjauan berlangsung? <span class="faq-plus">+</span></summary>
+        <div class="faq-a">Admin sekolah menargetkan peninjauan selesai dalam waktu maksimal 1×24 jam sejak karya diajukan. Sistem juga mengirim pengingat otomatis kepada admin apabila ada pengajuan yang melewati batas waktu tersebut.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Format dan ukuran berkas bukti apa yang diterima? <span class="faq-plus">+</span></summary>
+        <div class="faq-a">Bukti karya dapat berupa foto (JPG/PNG) atau dokumen PDF, dengan ukuran berkas maksimal ±5 MB. Pastikan berkas terbaca jelas agar proses verifikasi berjalan lancar.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Apakah karya yang ditolak bisa diajukan ulang? <span class="faq-plus">+</span></summary>
+        <div class="faq-a">Bisa. Admin akan menyertakan catatan alasan penolakan. Setelah kekurangan dilengkapi atau diperbaiki, karya dapat diajukan kembali melalui formulir yang sama.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Apakah data pribadi dan berkas saya aman? <span class="faq-plus">+</span></summary>
+        <div class="faq-a">Ya. Seluruh data dan berkas bukti tersimpan pada sistem resmi sekolah dan hanya dapat diakses oleh admin yang berwenang untuk keperluan verifikasi dan publikasi karya.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Ke mana saya menghubungi jika mengalami kendala? <span class="faq-plus">+</span></summary>
+        <div class="faq-a">Silakan hubungi admin sekolah melalui kontak yang tertera pada bagian bawah halaman ini, atau kunjungi laman resmi SMKS Ciledug Al-Musaddadiyah untuk informasi lebih lanjut.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="cta-banner">
+      <div class="cta-banner-text">
+        <h2>Punya karya yang layak diabadikan?</h2>
+        <p>Jadilah bagian dari arsip digital resmi SMKS Ciledug Al-Musaddadiyah — ajukan karya Anda hari ini.</p>
+      </div>
+      <a href="#upload" class="btn-pill gold">Ajukan Karya Sekarang</a>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <div class="footer-brand">🏫 KaryaKu — SMK CALM</div>
-        <p>Sebuah arsip digital yang mendokumentasikan karya dan capaian guru, tenaga kependidikan, peserta didik,
+        <div class="footer-brand"><span class="logo-badge">K</span> KaryaKu — SMK CALM</div>
+        <p>Arsip digital resmi yang mendokumentasikan karya dan capaian guru, tenaga kependidikan, peserta didik,
            serta alumni SMKS Ciledug Al-Musaddadiyah Garut — bagian dari ekosistem digital sekolah sejak 1996,
            di bawah naungan Yayasan Al-Musaddadiyah Garut.</p>
-        <p>📍 Jl. Mayor Syamsu No.2, Jayaraga, Tarogong Kidul, Garut<br>📞 (0262) 4892181</p>
+        <ul class="footer-contact">
+          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Jl. Mayor Syamsu No.2, Jayaraga, Tarogong Kidul, Garut</li>
+          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"></path></svg> (0262) 4892181</li>
+        </ul>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/smkscalm_official/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg></a>
+          <a href="https://www.smkciledugalmusaddadiyah.sch.id/" target="_blank" rel="noopener" aria-label="Website Sekolah"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 010 20 15 15 0 010-20z"></path></svg></a>
+        </div>
       </div>
       <div>
         <h4>Untuk Siapa</h4>
@@ -340,11 +626,14 @@
           <li><a href="https://www.smkciledugalmusaddadiyah.sch.id/" target="_blank" rel="noopener">Beranda Utama</a></li>
           <li><a href="https://www.smkciledugalmusaddadiyah.sch.id/p/profil.html" target="_blank" rel="noopener">Profil Sekolah</a></li>
           <li><a href="https://www.smkciledugalmusaddadiyah.sch.id/p/galeri.html" target="_blank" rel="noopener">Galeri Sekolah</a></li>
-          <li><a href="https://www.instagram.com/smkscalm_official/" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="#faq">Pertanyaan Umum</a></li>
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">© <span id="tahunFooter"></span> SMK Ciledug Al-Musaddadiyah · KaryaKu — Karya dipublikasikan setelah melalui tinjauan admin (maksimal 1×24 jam)</div>
+    <div class="footer-bottom">
+      <span>© <span id="tahunFooter"></span> SMK Ciledug Al-Musaddadiyah · KaryaKu</span>
+      <span>Karya dipublikasikan setelah melalui tinjauan admin (maksimal 1×24 jam)</span>
+    </div>
   </div>
 </footer>
 
